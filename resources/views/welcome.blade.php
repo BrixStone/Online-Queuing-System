@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,6 +15,7 @@
             min-height: 100vh;
             margin: 0;
         }
+
         .form-card {
             background: #ffffff;
             padding: 30px;
@@ -22,27 +24,33 @@
             width: 100%;
             max-width: 400px;
         }
+
         .form-card h2 {
             margin-bottom: 20px;
             color: #333;
             text-align: center;
         }
+
         .form-group {
             margin-bottom: 15px;
         }
+
         .form-group label {
             display: block;
             margin-bottom: 5px;
             color: #666;
             font-size: 14px;
         }
-        .form-group input, .form-group select {
+
+        .form-group input,
+        .form-group select {
             width: 100%;
             padding: 10px;
             border: 1px solid #ccc;
             border-radius: 5px;
             box-sizing: border-box;
         }
+
         .submit-btn {
             width: 100%;
             padding: 12px;
@@ -53,9 +61,11 @@
             font-size: 16px;
             cursor: pointer;
         }
+
         .submit-btn:hover {
             background-color: #4338ca;
         }
+
         .alert-success {
             background-color: #d1fae5;
             color: #065f46;
@@ -66,15 +76,16 @@
         }
     </style>
 </head>
+
 <body>
 
     <div class="form-card">
         <h2>Queue Registration Form</h2>
 
         @if(session('success'))
-            <div class="alert-success">
-                {{ session('success') }}
-            </div>
+        <div class="alert-success">
+            {{ session('success') }}
+        </div>
         @endif
 
         <form action="{{ route('submit.form') }}" method="POST">
@@ -85,10 +96,52 @@
                 <input type="text" id="name" name="name" placeholder="Enter your full name" required>
             </div>
 
+            <div class="form-group" id="mobileGroup" style="display: none;">
+                <label for="mobile_number">Mobile Number</label>
+                <input
+                    type="text"
+                    id="mobile_number"
+                    name="mobile_number"
+                    placeholder="Enter your mobile number">
+            </div>
 
+            <input type="hidden" name="device_id" id="device_id">
+            <input type="hidden" name="platform" id="platform">
             <button type="submit" class="submit-btn">Get Tracking Number</button>
+
+
         </form>
     </div>
+    <script>
+        let deviceId = localStorage.getItem('device_id');
 
+        if (!deviceId) {
+            deviceId = crypto.randomUUID();
+            localStorage.setItem('device_id', deviceId);
+        }
+
+        let platform;
+
+        if (/Android/i.test(navigator.userAgent)) {
+            platform = 'android';
+        } else if (/iPhone|iPad|ipod/i.test(navigator.userAgent)) {
+            platform = 'ios';
+        } else if (/Windows|Macintosh|Linux/i.test(navigator.userAgent)) {
+            platform = 'desktop';
+        } else {
+            platform = 'other';
+        }
+
+        if (platform === 'ios') {
+            document.getElementById('mobileGroup').style.display = 'block';
+        }
+
+        document.getElementById('device_id').value = deviceId;
+        document.getElementById('platform').value = platform;
+
+        console.log('Device ID:', deviceId);
+        console.log('Platform:', platform);
+    </script>
 </body>
+
 </html>
