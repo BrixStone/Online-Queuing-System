@@ -2,9 +2,11 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
+// use App\Models\QueueTicket;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
+
 
 class DatabaseSeeder extends Seeder
 {
@@ -17,9 +19,13 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-        User::factory()->create([
+        DB::table('queue_tickets')->insert([
             'name' => 'Test User',
-            'email' => 'test@example.com',
+            'tracking_number' => 'A002',
+            'device_id' => '550e8400-e29b-41d4-a716-446655440000',
+            'mobile_number' => '0919238100',
+            'status' => 'holding',
+            'assigned_teller' => 'A',
         ]);
     }
 }
