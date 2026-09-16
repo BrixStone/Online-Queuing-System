@@ -16,5 +16,6 @@ class QueueTicket extends Model
         'mobile_number',
         'status',
         'assigned_teller',
+        'queue_date',
     ];
 }
