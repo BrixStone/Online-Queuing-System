@@ -12,8 +12,10 @@ class QueueTicket extends Model
         'name',
         'tracking_number',
         'device_id',
+        'platform',
         'mobile_number',
         'status',
         'assigned_teller',
+        'queue_date',
     ];
 }
