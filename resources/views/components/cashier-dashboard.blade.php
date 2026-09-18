@@ -10,7 +10,6 @@ new class extends Component {
     public $pinInput = '';
     public $isAuthenticated = false;
     
-    // Hardcoded PIN
     private $correctPin = '1234';
 
     public function mount()

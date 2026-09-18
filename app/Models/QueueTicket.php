@@ -8,14 +8,12 @@ class QueueTicket extends Model
 {
     protected $guarded = [];
 
-    // Queue Statuses
-    public const STATUS_HOLDING = 'holding';       // Waiting in virtual line
-    public const STATUS_ACTIVE = 'active';         // In physical line, waiting for cashier
-    public const STATUS_SERVING = 'serving';       // Currently at the counter
-    public const STATUS_COMPLETED = 'completed';   // Finished
-    public const STATUS_HELD = 'held';             // No show / Put on hold by cashier
+    public const STATUS_HOLDING = 'holding';
+    public const STATUS_ACTIVE = 'active';
+    public const STATUS_SERVING = 'serving';
+    public const STATUS_COMPLETED = 'completed';
+    public const STATUS_HELD = 'held';
 
-    // Scopes to easily grab tickets by status
     public function scopeHolding($query)
     {
         return $query->where('status', self::STATUS_HOLDING)->orderBy('created_at', 'asc');
