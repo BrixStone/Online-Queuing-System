@@ -8,11 +8,11 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+use Livewire\Volt\Volt;
 
+Volt::route('/cashier', 'cashier-dashboard');
 
 Route::post('/submit', [UserControllers::class ,'store'])->name('submit.form');
-
-
 
 // Route::post('/submit-form', function (Request $request) {
 //     $validatedData = $request->validate([
