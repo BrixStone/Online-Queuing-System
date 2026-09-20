@@ -19,7 +19,7 @@ Route::post('/submit', [UserControllers::class ,'store'])->name('submit.form');
 Route::get('/queue/check-device', [UserControllers::class, 'checkDevice']);
 
 
-Route::get('/queue/status/{token}', [UserControllers::class, 'status'])->name('queue.status');
+Route::get('/queue/status/{token}', [UserControllers::class, 'status'])->name('queue.status')->whereUuid('token');;
 
 // Route::post('/submit-form', function (Request $request) {
 //     $validatedData = $request->validate([
