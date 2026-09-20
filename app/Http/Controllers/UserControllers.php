@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use App\Models\QueueTicket;
 
 class UserControllers extends Controller
@@ -39,8 +40,34 @@ class UserControllers extends Controller
             'platform' => $validated['platform'],
             'tracking_number' => $trackingNumber,
             'status' => 'holding',
+            'access_token' => Str::uuid(),
         ]);
 
-        return redirect()->back();
+        
+        return view('show', compact('queue'));
     }
+
+    public function checkDevice(Request $request) {
+        $deviceId = $request->query('device_id');
+
+        $ticket = QueueTicket::where('device_id', $deviceId)
+        ->whereNotIn('status', [QueueTicket::STATUS_COMPLETED])
+        ->first();
+        return response()->json([
+            'exists' => (bool) $ticket,
+            'ticket' => $ticket
+        ]);
+    }
+
+    public function status($token)
+{
+    $queue = QueueTicket::where('access_token', $token)
+        ->firstOrFail();
+
+    return view('show', compact('queue'));
 }
+
+
+}
+
+

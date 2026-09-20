@@ -1,18 +1,25 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserControllers;
-
+use Livewire\Volt\Volt;
 Route::get('/', function () {
     return view('welcome');
 });
 
-use Livewire\Volt\Volt;
+Route::get('/tracker', function () {
+    return view('show');
+})->name('user.show');
+
+
 
 Volt::route('/cashier', 'cashier-dashboard');
 
 Route::post('/submit', [UserControllers::class ,'store'])->name('submit.form');
+Route::get('/queue/check-device', [UserControllers::class, 'checkDevice']);
+
+
+Route::get('/queue/status/{token}', [UserControllers::class, 'status'])->name('queue.status');
 
 // Route::post('/submit-form', function (Request $request) {
 //     $validatedData = $request->validate([
