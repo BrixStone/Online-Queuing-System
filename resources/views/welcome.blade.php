@@ -79,6 +79,7 @@
 
 <body>
 
+
     <div class="form-card">
         <h2>Queue Registration Form</h2>
 
@@ -141,6 +142,17 @@
 
         console.log('Device ID:', deviceId);
         console.log('Platform:', platform);
+
+        fetch(`/queue/check-device?device_id=${deviceId}`)
+            .then(response => response.json())
+            .then(data=> {
+                if(data.exists) {
+                    window.location.href = `/queue/status/${data.ticket.access_token}`;
+                }
+            })
+            .catch(error => {
+        console.error('Error checking device:', error);
+            });
     </script>
 </body>
 

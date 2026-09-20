@@ -17,6 +17,7 @@ class QueueTicket extends Model
         'status',
         'assigned_teller',
         'queue_date',
+        'access_token',
     ];
 
     public const STATUS_HOLDING = 'holding';
