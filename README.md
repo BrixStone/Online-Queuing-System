@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="public/logo.svg" alt="Online Queuing System Logo" width="600">
+</p>
+
 # Online Queuing System
 
 A modern, efficient Online Queuing System built with Laravel and Livewire to streamline line management and optimize customer flow. This system is designed to provide real-time queue status updates, assign users to tellers, and manage queue progression dynamically.
