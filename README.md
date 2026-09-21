@@ -2,7 +2,7 @@
 
 A modern, efficient Online Queuing System built with Laravel and Livewire to streamline line management and optimize customer flow. This system is designed to provide real-time queue status updates, assign users to tellers, and manage queue progression dynamically.
 
-## 🚀 Features
+##  Features
 
 - **Automated Ticket Generation:** Automatically generates sequential tracking numbers (e.g., `TKT-001`) for new queue entries.
 - **Dynamic Status Tracking:** Monitors tickets through various lifecycle states:
@@ -14,7 +14,7 @@ A modern, efficient Online Queuing System built with Laravel and Livewire to str
 - **Teller Queue Management:** Comprehensive operations for tellers including calling the next ticket, holding, and completing current tickets.
 - **Smart Active Queue Balancing:** Automatically fills the active queue up to maximum capacity (default: 5) as tickets are served and completed.
 
-## 🛠️ Tech Stack
+##  Tech Stack
 
 - **Framework:** Laravel 11.x
 - **Language:** PHP 8.3
@@ -22,7 +22,7 @@ A modern, efficient Online Queuing System built with Laravel and Livewire to str
 - **Testing:** Pest PHP
 - **Database:** SQLite (default) / MySQL / PostgreSQL
 
-## ⚙️ Installation
+##  Installation
 
 Follow these steps to set up the project locally:
 
@@ -60,7 +60,7 @@ Follow these steps to set up the project locally:
    ```
    Navigate to `http://localhost:8000` in your browser.
 
-## 🏗️ System Architecture
+##  System Architecture
 
 ### Core Models
 - `QueueTicket`: The central entity managing the ticketing information, capturing the user's name, tracking number, and current status.
@@ -73,7 +73,7 @@ Follow these steps to set up the project locally:
   - `callNext(string $tellerName)`: Pulls the next active ticket for serving.
   - `holdCurrent(string $tellerName)` / `completeCurrent(string $tellerName)`: Updates ticket states accordingly.
 
-## 🤝 Contributing
+##  Contributing
 
 Contributions, issues, and feature requests are welcome!
 
@@ -83,6 +83,6 @@ Contributions, issues, and feature requests are welcome!
 4. Push to the Branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
-## 📄 License
+##  License
 
 This project is licensed under the MIT License.
