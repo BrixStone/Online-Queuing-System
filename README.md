@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="public/logo.svg" alt="Online Queuing System Logo" width="600">
+  <img src="public/custom-logo.png" alt="QueueFlow Logo" width="600">
 </p>
 
 # Online Queuing System
