@@ -1,58 +1,92 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
-
 <p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
+  <img src="public/custom-logo.png" alt="QueueFlow Logo" width="600">
 </p>
 
-## About Laravel
+# Online Queuing System
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+A modern, efficient Online Queuing System built with Laravel and Livewire to streamline line management and optimize customer flow. This system is designed to provide real-time queue status updates, assign users to tellers, and manage queue progression dynamically.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+##  Features
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- **Automated Ticket Generation:** Automatically generates sequential tracking numbers (e.g., `TKT-001`) for new queue entries.
+- **Dynamic Status Tracking:** Monitors tickets through various lifecycle states:
+  - `holding` (Waiting in the general queue)
+  - `active` (Moved to the active queue, max capacity of 5)
+  - `serving` (Currently being served by a teller)
+  - `held` (Temporarily paused/held by teller)
+  - `completed` (Successfully served)
+- **Teller Queue Management:** Comprehensive operations for tellers including calling the next ticket, holding, and completing current tickets.
+- **Smart Active Queue Balancing:** Automatically fills the active queue up to maximum capacity (default: 5) as tickets are served and completed.
 
-## Learning Laravel
+##  Tech Stack
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+- **Framework:** Laravel 11.x
+- **Language:** PHP 8.3
+- **Frontend / Interactivity:** Livewire 3.x / Livewire Volt
+- **Testing:** Pest PHP
+- **Database:** SQLite (default) / MySQL / PostgreSQL
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+##  Installation
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+Follow these steps to set up the project locally:
 
-## Agentic Development
+1. **Clone the repository:**
+   ```bash
+   git clone <your-repo-url>
+   cd Online-Queuing-System-andrew
+   ```
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+2. **Install Composer dependencies:**
+   ```bash
+   composer install
+   ```
 
-```bash
-composer require laravel/boost --dev
+3. **Install NPM packages and build assets:**
+   ```bash
+   npm install
+   npm run build
+   ```
 
-php artisan boost:install
-```
+4. **Set up the environment:**
+   ```bash
+   cp .env.example .env
+   php artisan key:generate
+   ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+5. **Run Database Migrations:**
+   ```bash
+   php artisan migrate
+   ```
 
-## Contributing
+6. **Start the development server:**
+   ```bash
+   php artisan serve
+   ```
+   Navigate to `http://localhost:8000` in your browser.
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+##  System Architecture
 
-## Code of Conduct
+### Core Models
+- `QueueTicket`: The central entity managing the ticketing information, capturing the user's name, tracking number, and current status.
+- `User`: Handles teller and admin authentication and access control.
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### Core Controllers
+- `QueueController`: Manages the business logic for the queue lifecycle:
+  - `requestQueue(string $studentName)`: Adds a user to the holding queue.
+  - `startQueue(string $tellerName)`: Initializes the teller session.
+  - `callNext(string $tellerName)`: Pulls the next active ticket for serving.
+  - `holdCurrent(string $tellerName)` / `completeCurrent(string $tellerName)`: Updates ticket states accordingly.
 
-## Security Vulnerabilities
+##  Contributing
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Contributions, issues, and feature requests are welcome!
 
-## License
+1. Fork the Project
+2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the Branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+##  License
+
+This project is licensed under the MIT License.
