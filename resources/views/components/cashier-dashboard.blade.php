@@ -101,7 +101,7 @@ new class extends Component {
 };
 ?>
 
-<div class="p-8 font-sans">
+<div class="p-8 font-sans" wire:poll.2s>
     @if(!$isAuthenticated)
         <div class="max-w-md mx-auto mt-20 bg-white p-8 rounded-xl border-2 border-gray-200 shadow-sm text-center">
             <h2 class="text-2xl font-bold mb-6 text-gray-800">Cashier Login</h2>
