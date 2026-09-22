@@ -44,7 +44,7 @@ class UserControllers extends Controller
         ]);
 
         
-        return view('show', compact('queue'));
+        return redirect()->route('queue.status', ['token' => $queue->access_token,]);
     }
 
     public function checkDevice(Request $request) {
