@@ -44,15 +44,19 @@ class UserControllers extends Controller
         ]);
 
         
-        return view('show', compact('queue'));
+        return redirect()->route('queue.status', ['token' => $queue->access_token,]);
     }
 
     public function checkDevice(Request $request) {
         $deviceId = $request->query('device_id');
+        $today = now()->toDateString();
 
         $ticket = QueueTicket::where('device_id', $deviceId)
+        ->where('queue_date', $today)
+        ->whereNotNull('access_token')
         ->whereNotIn('status', [QueueTicket::STATUS_COMPLETED])
         ->first();
+        
         return response()->json([
             'exists' => (bool) $ticket,
             'ticket' => $ticket

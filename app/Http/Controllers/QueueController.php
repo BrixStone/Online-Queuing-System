@@ -59,8 +59,6 @@ class QueueController extends Controller
         if ($serving) {
             $serving->update(['status' => QueueTicket::STATUS_HELD]);
         }
-        
-        return $this->callNext($tellerName);
     }
 
     public function completeCurrent(string $tellerName)
@@ -69,8 +67,6 @@ class QueueController extends Controller
         if ($serving) {
             $serving->update(['status' => QueueTicket::STATUS_COMPLETED]);
         }
-        
-        return $this->callNext($tellerName);
     }
 
     public function fillActiveQueue(string $tellerName = null)

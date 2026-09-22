@@ -151,7 +151,7 @@
                 }
             })
             .catch(error => {
-        console.error('Error checking device:', error);
+                console.error('Error checking device:', error);
             });
     </script>
 </body>
