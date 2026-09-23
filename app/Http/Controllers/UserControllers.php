@@ -8,7 +8,6 @@ use App\Models\QueueTicket;
 
 class UserControllers extends Controller
 {
-
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -39,24 +38,25 @@ class UserControllers extends Controller
             'device_id' => $validated['device_id'],
             'platform' => $validated['platform'],
             'tracking_number' => $trackingNumber,
-            'status' => 'holding',
-            'access_token' => Str::uuid(),
+            'status' => QueueTicket::STATUS_HOLDING,
+            'access_token' => (string) Str::uuid(),
+            'queue_date' => $today,
         ]);
 
-        
-        return redirect()->route('queue.status', ['token' => $queue->access_token,]);
+        return redirect()->route('queue.status', ['token' => $queue->access_token]);
     }
 
-    public function checkDevice(Request $request) {
+    public function checkDevice(Request $request)
+    {
         $deviceId = $request->query('device_id');
         $today = now()->toDateString();
 
         $ticket = QueueTicket::where('device_id', $deviceId)
-        ->where('queue_date', $today)
-        ->whereNotNull('access_token')
-        ->whereNotIn('status', [QueueTicket::STATUS_COMPLETED])
-        ->first();
-        
+            ->where('queue_date', $today)
+            ->whereNotNull('access_token')
+            ->whereNotIn('status', [QueueTicket::STATUS_COMPLETED])
+            ->first();
+
         return response()->json([
             'exists' => (bool) $ticket,
             'ticket' => $ticket
@@ -64,14 +64,9 @@ class UserControllers extends Controller
     }
 
     public function status($token)
-{
-    $queue = QueueTicket::where('access_token', $token)
-        ->firstOrFail();
+    {
+        $queue = QueueTicket::where('access_token', $token)->firstOrFail();
 
-    return view('show', compact('queue'));
+        return view('show', compact('queue'));
+    }
 }
-
-
-}
-
-
