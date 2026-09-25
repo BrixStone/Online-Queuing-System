@@ -6,6 +6,7 @@ use App\Models\QueueTicket;
 state([
     'token' => null,
     'queue' => null,
+    'position' => null,
 ]);
 
 mount(function ($token) {
@@ -15,15 +16,73 @@ mount(function ($token) {
         'access_token',
         $token
     )->firstOrFail();
+
+    $this->checkNoShow();
+    $this->updatePosition();
 });
 
-$refreshQueue = function () {
-    if ($this->token) {
-        $this->queue = QueueTicket::where(
-            'access_token',
-            $this->token
-        )->first();
+$updatePosition = function () {
+    if (!$this->queue) {
+        $this->position = null;
+        return;
     }
+
+    $this->position = QueueTicket::where(
+        'created_at',
+        '<',
+        $this->queue->created_at
+    )
+    ->whereIn('status', [
+        QueueTicket::STATUS_HOLDING,
+        QueueTicket::STATUS_ACTIVE,
+        QueueTicket::STATUS_SERVING,
+    ])
+    ->count() + 1;
+};
+
+$checkNoShow = function () {
+    if (!$this->queue) {
+        return;
+    }
+
+    $this->queue->refresh();
+
+    if ($this->queue->status === QueueTicket::STATUS_SERVING) {
+        $this->queue->checkNoShow();
+        $this->queue->refresh();
+    }
+};
+
+$refreshQueue = function () {
+    if (!$this->token) {
+        return;
+    }
+
+    $this->queue = QueueTicket::where(
+        'access_token',
+        $this->token
+    )->first();
+
+    if (!$this->queue) {
+        $this->position = null;
+        return;
+    }
+
+    $this->checkNoShow();
+    $this->updatePosition();
+};
+
+$imHere = function () {
+    if (!$this->queue) {
+        return;
+    }
+
+    $this->queue->refresh();
+
+    $this->queue->markArrived();
+
+    $this->queue->refresh();
+    $this->updatePosition();
 };
 
 ?>
@@ -39,232 +98,268 @@ $refreshQueue = function () {
     <h2>Queue Status</h2>
 
     <div>
-        {{ $queue->tracking_number ?? '---' }}
+        <strong>
+            {{ $queue->tracking_number ?? '---' }}
+        </strong>
+
         <br>
+
         {{ $queue->name ?? '---' }}
     </div>
 
-    <div>
-        <div id="status-badge" data-status="{{ $queue->status }}">
+    @if(
+        $queue &&
+        in_array($queue->status, [
+            QueueTicket::STATUS_HOLDING,
+            QueueTicket::STATUS_ACTIVE,
+            QueueTicket::STATUS_SERVING,
+        ])
+    )
+        <div style="margin-top: 20px;">
 
-            @if(($queue->status ?? '') === 'holding')
+            <strong>Your Position</strong>
+
+            <div
+                style="
+                    font-size: 40px;
+                    font-weight: bold;
+                "
+            >
+                #{{ $position ?? '---' }}
+            </div>
+
+        </div>
+    @endif
+
+    <div style="margin-top: 20px;">
+
+        @if(($queue->status ?? '') === QueueTicket::STATUS_HOLDING)
+
+            <div>
+                🕒 <strong>Waiting in Line</strong>
+            </div>
+
+            <p>
+                Please wait. You will be notified when
+                you are close to being served.
+            </p>
+
+        @elseif(($queue->status ?? '') === QueueTicket::STATUS_ACTIVE)
+
+            <div>
+                📢 <strong>Please Stand By</strong>
+            </div>
+
+            <p>
+                You are close to being served.
+            </p>
+
+            <p>
+                Please stay nearby and be ready when
+                your number is called.
+            </p>
+
+        @elseif(($queue->status ?? '') === QueueTicket::STATUS_SERVING)
+
+            @if($queue->arrived_at)
+
                 <div>
-                    🕒 Waiting in Line
+                    ✅ <strong>You are checked in!</strong>
                 </div>
 
-            @elseif(($queue->status ?? '') === 'active')
-                <div>
-                    📢 You are next in line!
-                </div>
-
-            @elseif(($queue->status ?? '') === 'serving')
-                <div>
-                    ✅ Please proceed to
-                    {{ $queue->assigned_teller ?? 'the counter' }}
-                </div>
+                <p>
+                    Please proceed to
+                    <strong>
+                        {{ $queue->assigned_teller ?? 'the counter' }}
+                    </strong>
+                </p>
 
             @else
+
                 <div>
-                    Status:
-                    {{ ucfirst($queue->status ?? 'Unknown') }}
+                    📢 <strong>It is Your Turn</strong>
                 </div>
+
+                <p>
+                    Please proceed to
+                    <strong>
+                        {{ $queue->assigned_teller ?? 'the counter' }}
+                    </strong>
+                </p>
+
+                @if($queue->serving_started_at)
+
+                    <div
+                        style="
+                            margin-top: 20px;
+                            padding: 20px;
+                            border: 2px solid #f59e0b;
+                            border-radius: 10px;
+                        "
+                    >
+
+                        <strong>
+                            ⏱️ Please confirm that you are here
+                        </strong>
+
+                        <p>
+                            You have 3 minutes to arrive.
+                        </p>
+
+                        <div
+                            id="arrival-countdown"
+                            data-expires-at="{{ $queue->serving_started_at->copy()->addMinutes(3)->toIso8601String() }}"
+                            style="
+                                font-size: 42px;
+                                font-weight: bold;
+                                margin: 15px 0;
+                            "
+                        >
+                            03:00
+                        </div>
+
+                        <button
+                            type="button"
+                            wire:click="imHere"
+                            id="im-here-button"
+                        >
+                            🙋 I'm Here
+                        </button>
+
+                        <p id="countdown-message"></p>
+
+                    </div>
+
+                @endif
+
             @endif
 
-        </div>
+        @elseif(($queue->status ?? '') === QueueTicket::STATUS_NO_SHOW)
 
-        <div>
-            <button
-                id="enable-notifications"
-                type="button">
-                🔔 Allow Notifications
-            </button>
+            <div>
+                ❌ <strong>No Show</strong>
+            </div>
 
-            <p id="notification-message"></p>
-        </div>
+            <p>
+                Your 3-minute arrival time has expired.
+            </p>
+
+            <p>
+                Please contact the staff if you believe
+                this was a mistake.
+            </p>
+
+        @elseif(($queue->status ?? '') === QueueTicket::STATUS_COMPLETED)
+
+            <div>
+                ✅ <strong>Completed</strong>
+            </div>
+
+        @elseif(($queue->status ?? '') === QueueTicket::STATUS_HELD)
+
+            <div>
+                ⏸️ <strong>On Hold</strong>
+            </div>
+
+        @else
+
+            <div>
+                Status:
+                <strong>
+                    {{ ucfirst($queue->status ?? 'Unknown') }}
+                </strong>
+            </div>
+
+        @endif
+
     </div>
 
 </div>
 
 <script>
-document.addEventListener('DOMContentLoaded', function () {
+    function initializeArrivalCountdown() {
 
-    const button = document.getElementById('enable-notifications');
-    const message = document.getElementById('notification-message');
+        const countdown =
+            document.getElementById('arrival-countdown');
 
-    if (!button) {
-        return;
-    }
-
-    button.addEventListener('click', async function () {
-
-        try {
-
-            // Check Service Worker support
-            if (!('serviceWorker' in navigator)) {
-                message.textContent =
-                    'Your browser does not support service workers.';
-                return;
-            }
-
-            // Check Push API support
-            if (!('PushManager' in window)) {
-                message.textContent =
-                    'Your browser does not support push notifications.';
-                return;
-            }
-
-            // Check Notification API support
-            if (!('Notification' in window)) {
-                message.textContent =
-                    'Your browser does not support notifications.';
-                return;
-            }
-
-            message.textContent =
-                'Requesting notification permission...';
-
-            // Ask browser permission
-            const permission =
-                await Notification.requestPermission();
-
-            if (permission !== 'granted') {
-                message.textContent =
-                    'Notification permission was not granted.';
-                return;
-            }
-
-            message.textContent =
-                'Registering notification service...';
-
-            // Register service worker
-            const registration =
-                await navigator.serviceWorker.register('/sw.js');
-
-            // Wait until service worker is ready
-            await navigator.serviceWorker.ready;
-
-            // VAPID public key
-            const publicKey =
-                @js(config('services.vapid.public_key'));
-
-            if (!publicKey) {
-                throw new Error(
-                    'VAPID public key is missing.'
-                );
-            }
-
-            // Create browser push subscription
-            const subscription =
-                await registration.pushManager.subscribe({
-                    userVisibleOnly: true,
-                    applicationServerKey:
-                        urlBase64ToUint8Array(publicKey)
-                });
-
-            const subscriptionData =
-                subscription.toJSON();
-
-            if (!subscriptionData.endpoint) {
-                throw new Error(
-                    'Push subscription endpoint is missing.'
-                );
-            }
-
-            message.textContent =
-                'Saving notification subscription...';
-
-            // Send subscription to Laravel
-            const response = await fetch(
-                @js(route(
-                    'queue.push-subscription.store',
-                    ['token' => $token]
-                )),
-                {
-                    method: 'POST',
-
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json',
-                        'X-CSRF-TOKEN':
-                            document
-                                .querySelector(
-                                    'meta[name="csrf-token"]'
-                                )
-                                ?.getAttribute('content')
-                    },
-
-                    body: JSON.stringify({
-                        endpoint:
-                            subscriptionData.endpoint,
-
-                        public_key:
-                            subscriptionData.keys?.p256dh ?? null,
-
-                        auth_token:
-                            subscriptionData.keys?.auth ?? null
-                    })
-                }
-            );
-
-            const result =
-                await response.json();
-
-            if (!response.ok) {
-                throw new Error(
-                    result.message ||
-                    'Failed to save subscription.'
-                );
-            }
-
-            message.textContent =
-                '✅ Notifications are now enabled.';
-
-            button.textContent =
-                '🔔 Notifications Enabled';
-
-            button.disabled = true;
-
-        } catch (error) {
-
-            console.error(
-                'Push notification error:',
-                error
-            );
-
-            message.textContent =
-                '❌ Could not enable notifications: ' +
-                error.message;
+        if (!countdown) {
+            return;
         }
-    });
 
+        const button =
+            document.getElementById('im-here-button');
 
-    /*
-    |--------------------------------------------------------------------------
-    | Convert VAPID Base64URL key to Uint8Array
-    |--------------------------------------------------------------------------
-    */
+        const message =
+            document.getElementById('countdown-message');
 
-    function urlBase64ToUint8Array(base64String) {
+        const expiresAt =
+            new Date(
+                countdown.dataset.expiresAt
+            ).getTime();
 
-        const padding =
-            '='.repeat(
-                (4 - base64String.length % 4) % 4
-            );
+        function updateCountdown() {
 
-        const base64 =
-            (base64String + padding)
-                .replace(/-/g, '+')
-                .replace(/_/g, '/');
+            const remaining =
+                expiresAt - Date.now();
 
-        const rawData =
-            window.atob(base64);
+            if (remaining <= 0) {
 
-        return Uint8Array.from(
-            [...rawData].map(function (char) {
-                return char.charCodeAt(0);
-            })
-        );
+                countdown.textContent = '00:00';
+
+                if (button) {
+                    button.disabled = true;
+                    button.textContent = 'Time Expired';
+                }
+
+                if (message) {
+                    message.textContent =
+                        'Your 3-minute arrival time has expired.';
+                }
+
+                return;
+            }
+
+            const totalSeconds =
+                Math.floor(remaining / 1000);
+
+            const minutes =
+                Math.floor(totalSeconds / 60);
+
+            const seconds =
+                totalSeconds % 60;
+
+            countdown.textContent =
+                String(minutes).padStart(2, '0') +
+                ':' +
+                String(seconds).padStart(2, '0');
+        }
+
+        updateCountdown();
+
+        const interval =
+            setInterval(function () {
+
+                if (!document.body.contains(countdown)) {
+                    clearInterval(interval);
+                    return;
+                }
+
+                updateCountdown();
+
+            }, 1000);
     }
 
-});
+    document.addEventListener(
+        'DOMContentLoaded',
+        function () {
+            initializeArrivalCountdown();
+        }
+    );
+
+    document.addEventListener(
+        'livewire:navigated',
+        function () {
+            initializeArrivalCountdown();
+        }
+    );
 </script>
