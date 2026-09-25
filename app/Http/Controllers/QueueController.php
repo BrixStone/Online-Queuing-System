@@ -11,7 +11,15 @@ class QueueController extends Controller
     public function requestQueue(string $studentName)
     {
         $count = QueueTicket::count();
-        $trackingNumber = 'TKT-' . str_pad($count + 1, 3, '0', STR_PAD_LEFT);
+
+        $trackingNumber =
+            'TKT-' .
+            str_pad(
+                $count + 1,
+                3,
+                '0',
+                STR_PAD_LEFT
+            );
 
         $ticket = QueueTicket::create([
             'name' => $studentName,
@@ -26,47 +34,78 @@ class QueueController extends Controller
 
     public function startQueue(string $tellerName)
     {
-        $this->fillActiveQueue($tellerName);
+        $this->fillActiveQueue();
     }
 
     public function stopQueue(string $tellerName)
     {
-        $serving = QueueTicket::serving()->where('assigned_teller', $tellerName)->first();
+        $serving = QueueTicket::serving()
+            ->where(
+                'assigned_teller',
+                $tellerName
+            )
+            ->first();
+
         if ($serving) {
-            $serving->update(['status' => QueueTicket::STATUS_HELD]);
+            $serving->update([
+                'status' => QueueTicket::STATUS_HELD,
+            ]);
+
+            $this->fillActiveQueue();
         }
+
+        return $serving;
     }
 
     public function callNext(string $tellerName)
     {
         $nextInLine = QueueTicket::active()->first();
 
-        if ($nextInLine) {
-            $nextInLine->update([
-                'status' => QueueTicket::STATUS_SERVING,
-                'assigned_teller' => $tellerName
-            ]);
-            
-            $this->fillActiveQueue($tellerName);
+        if (!$nextInLine) {
+            return null;
         }
 
-        return $nextInLine;
+        $nextInLine->startServing($tellerName);
+
+        $this->fillActiveQueue();
+
+        return $nextInLine->fresh();
     }
 
     public function holdCurrent(string $tellerName)
     {
-        $serving = QueueTicket::serving()->where('assigned_teller', $tellerName)->first();
+        $serving = QueueTicket::serving()
+            ->where(
+                'assigned_teller',
+                $tellerName
+            )
+            ->first();
+
         if ($serving) {
-            $serving->update(['status' => QueueTicket::STATUS_HELD]);
+            $serving->update([
+                'status' => QueueTicket::STATUS_HELD,
+            ]);
+
+            $this->fillActiveQueue();
         }
+
+        return $serving;
     }
 
     public function completeCurrent(string $tellerName)
     {
-        $serving = QueueTicket::serving()->where('assigned_teller', $tellerName)->first();
+        $serving = QueueTicket::serving()
+            ->where(
+                'assigned_teller',
+                $tellerName
+            )
+            ->first();
+
         if ($serving) {
-            $serving->update(['status' => QueueTicket::STATUS_COMPLETED]);
+            $serving->completeServing();
         }
+
+        return $serving;
     }
 
     public function fillActiveQueue(string $tellerName = null)
@@ -75,14 +114,14 @@ class QueueController extends Controller
 
         while ($activeCount < self::MAX_ACTIVE_CAPACITY) {
             $nextHolding = QueueTicket::holding()->first();
-            
+
             if (!$nextHolding) {
                 break;
             }
 
             $nextHolding->update([
                 'status' => QueueTicket::STATUS_ACTIVE,
-                'assigned_teller' => $tellerName
+                'assigned_teller' => null,
             ]);
 
             $activeCount++;
