@@ -15,3 +15,13 @@ Volt::route('/queue/status/{token}', 'show')->name('queue.status');
 
 Route::post('/submit', [UserControllers::class, 'store'])->name('submit.form');
 Route::get('/queue/check-device', [UserControllers::class, 'checkDevice']);
+
+Route::get('/Contact', function(){
+
+    return view('contact');
+
+});
+
+Route::get('/about', function(){
+    return view('about');
+});
