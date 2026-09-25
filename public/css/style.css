@@ -1,0 +1,1343 @@
+/* =========================================
+   GOOGLE FONTS
+========================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@700;800&display=swap');
+
+
+/* =========================================
+   RESET
+========================================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+html,
+body {
+    width: 100%;
+    min-height: 100%;
+}
+
+
+html {
+    scroll-behavior: smooth;
+}
+
+
+body {
+    font-family: "Inter", sans-serif;
+
+    min-height: 100vh;
+
+    overflow-x: hidden;
+
+    
+}
+
+
+/* =========================================
+   REGISTER CONTAINER
+========================================= */
+
+.register-container {
+
+    position: relative;
+
+    width: 100%;
+    min-height: 100vh;
+
+    display: flex;
+    flex-direction: column;
+
+    align-items: flex-start;
+
+    overflow: hidden;
+
+    isolation: isolate;
+
+    background:
+        linear-gradient(
+            180deg,
+            #1A3C8F 0%,
+            rgba(211, 47, 47, 0.533333) 50%,
+            #0D1B3D 100%
+        );
+
+    background-blend-mode: multiply;
+}
+
+
+/* =========================================
+   BACKGROUND IMAGE
+========================================= */
+
+.background-image {
+
+    position: absolute;
+
+    left: -2.08%;
+    right: -2.08%;
+
+    top: -2.67%;
+    bottom: -5%;
+
+    z-index: -2;
+
+    background-image: url("../images/Regis_Back.svg");
+
+    background-size: cover;
+
+    background-position: center;
+
+    background-repeat: no-repeat;
+
+    filter: blur(20px);
+
+    transform: scale(1.05);
+}
+
+
+/* =========================================
+   DARK OVERLAY
+========================================= */
+
+.background-overlay {
+
+    position: absolute;
+
+    width: 100%;
+    height: 100%;
+
+    left: 0;
+    top: 0;
+
+    z-index: -1;
+
+    background: #282727;
+
+    opacity: 0.4;
+
+    pointer-events: none;
+}
+
+
+/* =========================================
+   NAVIGATION
+========================================= */
+
+.register-nav {
+
+    position: relative;
+
+    width: 100%;
+    height: 84px;
+
+    padding: 24px 40px;
+
+    display: flex;
+
+    flex-direction: row;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    z-index: 10;
+}
+
+
+/* =========================================
+   ACLC LOGO GROUP
+========================================= */
+
+.aclc-logo-group {
+
+    display: flex;
+
+    flex-direction: row;
+
+    align-items: center;
+
+    gap: 12px;
+
+    width: 126px;
+    height: 36px;
+}
+
+.log {
+    align-content: center;
+    align-items: center;
+    align-self: center;
+
+    margin-top: -70px;
+
+    width: 90px;
+    height: 90px;
+}
+
+
+/* =========================================
+   LOGO CIRCLE
+========================================= */
+
+.logo-circle {
+
+    position: relative;
+
+    width: 36px;
+    height: 36px;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    background-image: url("../images/Regis_Back.svg");
+
+    border-radius: 16px;
+
+    overflow: hidden;
+
+    flex-shrink: 0;
+}
+
+
+.logo-circle img {
+
+    display: block;
+
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+
+    border-radius: 50%;
+}
+
+
+/* =========================================
+   LOGO TEXT
+========================================= */
+
+.logo-info {
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: flex-start;
+
+    gap: 1px;
+
+    width: 78px;
+    height: 36px;
+}
+
+
+.logo-title {
+
+    width: 48px;
+    height: 23px;
+
+    font-family: "Outfit", sans-serif;
+
+    font-size: 18px;
+    line-height: 23px;
+
+    font-weight: 800;
+
+    color: #FFFFFF;
+}
+
+
+.logo-location {
+
+    width: 78px;
+    height: 12px;
+
+    font-family: "Inter", sans-serif;
+
+    font-size: 10px;
+    line-height: 12px;
+
+    font-weight: 600;
+
+    text-transform: uppercase;
+
+    color: #FFFFFF;
+}
+
+
+/* =========================================
+   NAVIGATION LINKS
+========================================= */
+
+.nav-links {
+
+    display: flex;
+
+    flex-direction: row;
+
+    align-items: center;
+
+    gap: 48px;
+
+    width: 330px;
+    height: 17px;
+}
+
+
+.nav-links a {
+
+    color: #FFFFFF;
+
+    text-decoration: none;
+
+    font-family: "Inter", sans-serif;
+
+    font-size: 14px;
+    line-height: 17px;
+
+    font-weight: 500;
+
+    transition:
+        opacity 0.2s ease,
+        color 0.2s ease;
+}
+
+
+.nav-links a:not(.active) {
+
+    opacity: 0.75;
+}
+
+
+.nav-links a:hover {
+
+    opacity: 1;
+
+    color: #FFFFFF;
+}
+
+
+.nav-links a.active {
+
+    opacity: 1;
+
+    color: #FFFFFF;
+}
+
+
+/* =========================================
+   MAIN BODY
+========================================= */
+
+.main-body {
+
+    position: absolute;
+
+    width: 100%;
+
+    left: 0;
+    top: 0;
+
+    min-height: 100vh;
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: center;
+
+    align-items: center;
+
+    padding:
+        84px
+        20px
+        20px;
+
+    z-index: 2;
+
+    pointer-events: none;
+}
+
+
+/* =========================================
+   GLASS REGISTRATION CARD
+========================================= */
+
+.glass-registration-card {
+
+    position: relative;
+
+    width: 514px;
+    height: 506px;
+
+    padding:
+        102px
+        48px
+        48px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: flex-start;
+
+    gap: 39px;
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            0.121569
+        );
+
+    border:
+        1.5px solid
+        rgba(
+            255,
+            255,
+            255,
+            0.231373
+        );
+
+    box-shadow:
+        0px 16px 32px
+        rgba(
+            0,
+            0,
+            0,
+            0.247059
+        );
+
+    backdrop-filter: blur(12px);
+
+    -webkit-backdrop-filter: blur(12px);
+
+    border-radius: 24px;
+
+    transition:
+        opacity 0.3s ease,
+        transform 0.3s ease;
+
+    pointer-events: auto;
+}
+
+
+/* =========================================
+   CARD CLOSE BUTTON
+========================================= */
+
+.card-close {
+
+    position: absolute;
+
+    width: 24px;
+    height: 24px;
+
+    right: 24px;
+    top: 24px;
+
+    display: flex;
+
+    flex-direction: row;
+
+    justify-content: center;
+
+    align-items: center;
+
+    padding: 0;
+
+    background: transparent;
+
+    border:
+        1px solid
+        rgba(
+            255,
+            255,
+            255,
+            0.231373
+        );
+
+    border-radius: 6px;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease;
+}
+
+
+.card-close:hover {
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            0.15
+        );
+
+    border-color:
+        rgba(
+            255,
+            255,
+            255,
+            0.4
+        );
+}
+
+
+.card-close:active {
+
+    transform: scale(0.95);
+}
+
+
+.card-close svg {
+
+    width: 12px;
+    height: 12px;
+
+    display: block;
+}
+
+
+/* =========================================
+   CARD HEADER
+========================================= */
+
+.card-header {
+
+    width: 418px;
+    height: 70px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    gap: 6px;
+}
+
+
+/* =========================================
+   BADGE
+========================================= */
+
+.badge-crest {
+
+    width: 202px;
+    height: 24px;
+
+    margin-top: -20px;
+    padding:
+        4px 12px;
+
+    display: flex;
+
+    flex-direction: row;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background: #1A3C8F;
+
+    border-radius: 100px;
+
+    color: #FFFFFF;
+
+    font-family: "Inter", sans-serif;
+
+    font-size: 11px;
+    line-height: 13px;
+
+    font-weight: 700;
+
+    text-transform: uppercase;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+}
+
+
+/* =========================================
+   REGISTRATION TITLE
+========================================= */
+
+.card-header h1 {
+
+    width: 100%;
+    height: 40px;
+
+    font-family: "Outfit", sans-serif;
+
+    font-size: 28px;
+    line-height: 40px;
+
+    font-weight: 700;
+
+    text-align: center;
+
+    color: #FFFFFF;
+
+    white-space: nowrap;
+}
+
+
+/* =========================================
+   REGISTRATION FORM
+========================================= */
+
+.registration-form {
+
+    width: 418px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 20px;
+}
+
+
+/* =========================================
+   FORM FIELD
+========================================= */
+
+.form-field {
+
+    width: 418px;
+    height: 68px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: flex-start;
+
+    gap: 8px;
+}
+
+
+.form-field label {
+
+    width: auto;
+    height: 16px;
+
+    font-family: "Inter", sans-serif;
+
+    font-size: 13px;
+    line-height: 16px;
+
+    font-weight: 600;
+
+    color: #FFFFFF;
+}
+
+
+/* =========================================
+   INPUT UNDERLINE
+========================================= */
+
+.input-underline {
+
+    position: relative;
+
+    width: 418px;
+    height: 44px;
+
+    display: flex;
+
+    flex-direction: row;
+
+    align-items: center;
+
+    padding: 0;
+
+    border-bottom:
+        1px solid
+        rgba(
+            255,
+            255,
+            255,
+            0.231373
+        );
+
+    transition:
+        border-color 0.2s ease;
+}
+
+
+.input-underline:focus-within {
+
+    border-bottom-color:
+        rgba(
+            255,
+            255,
+            255,
+            0.8
+        );
+}
+
+
+/* =========================================
+   INPUT
+========================================= */
+
+.input-underline input {
+
+    width: 402px;
+    height: 44px;
+
+    padding: 0;
+
+    border: none;
+
+    outline: none;
+
+    background: transparent;
+
+    font-family: "Inter", sans-serif;
+
+    font-size: 15px;
+    line-height: 18px;
+
+    font-weight: 400;
+
+    color: #FFFFFF;
+}
+
+
+.input-underline input::placeholder {
+
+    color:
+        rgba(
+            255,
+            255,
+            255,
+            0.701961
+        );
+}
+
+
+.input-underline input:focus {
+
+    outline: none;
+}
+
+
+/* =========================================
+   USER ICON
+========================================= */
+
+.user-icon {
+
+    width: 16px;
+    height: 16px;
+
+    flex-shrink: 0;
+
+    display: block;
+}
+
+/* =========================================
+   PURPOSE ICON
+========================================= */
+
+.purpose-icon {
+    width: 10px;
+    height: 13px;
+
+    flex-shrink: 0;
+
+    display: block;
+}
+
+
+/* =========================================
+   PHONE ICON
+========================================= */
+
+.phone-icon {
+
+    width: 16px;
+    height: 16px;
+
+    flex-shrink: 0;
+
+    display: block;
+}
+
+
+/* =========================================
+   SELECT
+========================================= */
+
+.input-underline select {
+
+    width: 100%;
+    height: 44px;
+
+    padding:
+        0
+        25px
+        0
+        0;
+
+    border: none;
+
+    outline: none;
+
+    background: transparent;
+
+    appearance: none;
+
+    -webkit-appearance: none;
+
+    font-family: "Inter", sans-serif;
+
+    font-size: 15px;
+    line-height: 18px;
+
+    font-weight: 400;
+
+    color:
+        rgba(
+            255,
+            255,
+            255,
+            0.701961
+        );
+
+    cursor: pointer;
+}
+
+
+.input-underline select option {
+
+    color: #222222;
+
+    background: #FFFFFF;
+}
+
+
+/* =========================================
+   SELECT ARROW
+========================================= */
+
+.select-arrow {
+
+    position: absolute;
+
+    right: 5px;
+    top: 15px;
+
+    width: 10px;
+    height: 10px;
+
+    border-right:
+        2px solid #FFFFFF;
+
+    border-bottom:
+        2px solid #FFFFFF;
+
+    transform:
+        rotate(45deg);
+
+    pointer-events: none;
+}
+
+
+/* =========================================
+   FORM ACTIONS
+========================================= */
+
+.form-actions {
+
+    width: 418px;
+    height: 92px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    gap: 20px;
+}
+
+
+/* =========================================
+   REGISTER BUTTON
+========================================= */
+
+.register-button {
+
+    width: 418px;
+    height: 48px;
+
+    display: flex;
+
+    flex-direction: row;
+
+    justify-content: center;
+
+    align-items: center;
+
+    padding: 0;
+
+    background: #1A3C8F;
+
+    border: none;
+
+    box-shadow:
+        0px 6px 12px
+        rgba(
+            26,
+            60,
+            143,
+            0.25098
+        );
+
+    border-radius: 12px;
+
+    color: #FFFFFF;
+
+    font-family: "Inter", sans-serif;
+
+    font-size: 16px;
+    line-height: 19px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+.register-button:hover {
+
+    background: #234DA8;
+
+    box-shadow:
+        0px 8px 16px
+        rgba(
+            26,
+            60,
+            143,
+            0.35
+        );
+
+    transform:
+        translateY(-1px);
+}
+
+
+.register-button:active {
+
+    transform:
+        translateY(1px);
+
+    box-shadow:
+        0px 4px 8px
+        rgba(
+            26,
+            60,
+            143,
+            0.25
+        );
+}
+
+
+.register-button:focus {
+
+    outline: none;
+
+    box-shadow:
+        0 0 0 3px
+        rgba(
+            255,
+            255,
+            255,
+            0.15
+        ),
+        0px 6px 12px
+        rgba(
+            26,
+            60,
+            143,
+            0.25098
+        );
+}
+
+
+/* =========================================
+   SUCCESS MESSAGE
+========================================= */
+
+.alert-success {
+
+    width: 418px;
+
+    padding:
+        10px
+        14px;
+
+    border-radius: 8px;
+
+    background:
+        rgba(
+            46,
+            204,
+            113,
+            0.18
+        );
+
+    border:
+        1px solid
+        rgba(
+            46,
+            204,
+            113,
+            0.35
+        );
+
+    color: #FFFFFF;
+
+    font-family: "Inter", sans-serif;
+
+    font-size: 13px;
+
+    line-height: 18px;
+}
+
+
+/* =========================================
+   HIDDEN CARD
+========================================= */
+
+.glass-registration-card.hidden {
+
+    opacity: 0;
+
+    transform:
+        scale(0.95);
+
+    pointer-events: none;
+}
+
+
+/* =========================================
+   ACCESSIBILITY
+========================================= */
+
+button,
+input,
+select {
+
+    font: inherit;
+}
+
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible {
+
+    outline:
+        2px solid
+        rgba(
+            255,
+            255,
+            255,
+            0.8
+        );
+
+    outline-offset: 3px;
+}
+
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 768px) {
+
+    .register-nav {
+
+        padding:
+            20px 24px;
+    }
+
+
+    .nav-links {
+
+        gap: 22px;
+
+        width: auto;
+    }
+
+
+    .nav-links a {
+
+        font-size: 13px;
+    }
+
+
+    .glass-registration-card {
+
+        width: 100%;
+
+        max-width: 514px;
+
+        padding-left: 32px;
+
+        padding-right: 32px;
+    }
+
+
+    .card-header,
+    .registration-form {
+
+        width: 100%;
+    }
+
+
+    .form-field,
+    .input-underline,
+    .register-button,
+    .form-actions,
+    .alert-success {
+
+        width: 100%;
+    }
+
+
+    .input-underline input {
+
+        width: calc(100% - 20px);
+    }
+
+
+    .card-header h1 {
+
+        font-size: 28px;
+    }
+}
+
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 560px) {
+
+    .register-nav {
+
+        height: 70px;
+
+        padding:
+            18px 20px;
+    }
+
+
+    .nav-links {
+
+        gap: 14px;
+    }
+
+
+    .nav-links a:nth-child(3),
+    .nav-links a:nth-child(4) {
+
+        display: none;
+    }
+
+
+    .main-body {
+
+        padding:
+            90px 16px 20px;
+    }
+
+
+    .glass-registration-card {
+
+        width: 100%;
+
+        height: auto;
+
+        min-height: 506px;
+
+        padding:
+            80px 24px 32px;
+
+        border-radius: 20px;
+
+        gap: 30px;
+    }
+
+
+    .card-header {
+
+        height: auto;
+
+        min-height: 70px;
+    }
+
+
+    .card-header h1 {
+
+        width: 100%;
+
+        height: auto;
+
+        font-size: 25px;
+
+        line-height: 32px;
+
+        white-space: normal;
+    }
+
+
+    .badge-crest {
+
+        width: 190px;
+
+        font-size: 10px;
+    }
+
+
+    .registration-form {
+
+        gap: 20px;
+    }
+
+
+    .form-field {
+
+        height: 68px;
+    }
+
+
+    .form-actions {
+
+        height: 92px;
+    }
+
+
+    .register-button {
+
+        height: 48px;
+
+        font-size: 15px;
+    }
+}
+
+
+/* =========================================
+   VERY SMALL DEVICES
+========================================= */
+
+@media (max-width: 380px) {
+
+    .logo-info {
+
+        display: none;
+    }
+
+
+    .nav-links {
+
+        gap: 12px;
+    }
+
+
+    .nav-links a {
+
+        font-size: 12px;
+    }
+
+
+    .glass-registration-card {
+
+        padding-left: 20px;
+
+        padding-right: 20px;
+    }
+
+
+    .card-close {
+
+        right: 18px;
+
+        top: 18px;
+    }
+
+
+    .badge-crest {
+
+        width: 180px;
+
+        font-size: 9px;
+    }
+
+
+    .card-header h1 {
+
+        font-size: 23px;
+
+        line-height: 30px;
+    }
+}
+
+
+/* =========================================
+   HEIGHT RESPONSIVENESS
+========================================= */
+
+@media (max-height: 700px) and (min-width: 561px) {
+
+    .glass-registration-card {
+
+        transform:
+            scale(0.9);
+    }
+}
+
+
+/* =========================================
+   REDUCED MOTION
+========================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+
+        scroll-behavior: auto !important;
+
+        transition-duration: 0.01ms !important;
+
+        animation-duration: 0.01ms !important;
+
+        animation-iteration-count: 1 !important;
+    }
+}

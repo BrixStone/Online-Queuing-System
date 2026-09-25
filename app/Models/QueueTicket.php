@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class QueueTicket extends Model
 {
-    protected $table = 'queue_tickets';
+    protected $table = 'queue_tickets1';
 
     protected $fillable = [
         'name',
