@@ -110,7 +110,7 @@
                 <!-- ACLC LOGO -->
                 <img class="log" src="{{ asset('images/ACLC_logo.svg') }}" alt="ACLC Logo">
 
-                
+
 
 
 
@@ -136,10 +136,23 @@
                 ========================================== -->
 
                 @if (session('success'))
-                    <div class="alert-success">
-                        {{ session('success') }}
-                    </div>
+                <div class="alert-success">
+                    {{ session('success') }}
+                </div>
                 @endif
+
+                @if (session('error'))
+                <div class="alert-error">
+                    {{ session('error') }}
+                </div>
+                @endif
+
+                @if ($errors->any())
+                <div class="alert-error">
+                    {{ $errors->first() }}
+                </div>
+                @endif
+
 
 
                 <!-- =========================================
@@ -151,17 +164,22 @@
                     @csrf
 
 
-                    <!-- FULL NAME -->
+                    <!-- SCHOOL USN -->
 
                     <div class="form-field">
 
-                        <label for="usn">
+                        <label for="student_number">
                             School USN
                         </label>
 
                         <div class="input-underline">
 
-                            <input type="text" id="usn" name="usn" placeholder="C25-01-*****-MAN121"
+                            <input
+                                type="text"
+                                id="student_number"
+                                name="student_number"
+                                placeholder="C25-01-*****-MAN121"
+                                value="{{ old('student_number') }}"
                                 required>
 
                             <svg class="user-icon" width="16" height="16" viewBox="0 0 24 24" fill="none"
@@ -182,13 +200,18 @@
 
                     <div class="form-field">
 
-                        <label for="Purpose">
+                        <label for="purpose">
                             Purpose
                         </label>
 
                         <div class="input-underline">
 
-                            <input type="text" id="name" name="name" placeholder="Enter your Purpose"
+                            <input
+                                type="text"
+                                id="purpose"
+                                name="purpose"
+                                placeholder="Enter your Purpose"
+                                value="{{ old('purpose') }}"
                                 required>
 
                             <svg class="purpose-icon" width="10" height="13" viewBox="0 0 10 13" fill="none"
@@ -395,31 +418,31 @@
         |--------------------------------------------------------------------------
         */
 
-        fetch(
-                `/queue/check-device?device_id=${deviceId}`
-            )
+        // fetch(
+        //         `/queue/check-device?device_id=${deviceId}`
+        //     )
 
-            .then(response => response.json())
+        //     .then(response => response.json())
 
-            .then(data => {
+        //     .then(data => {
 
-                if (data.exists) {
+        //         if (data.exists) {
 
-                    window.location.href =
-                        `/queue/status/${data.ticket.access_token}`;
+        //             window.location.href =
+        //                 `/queue/status/${data.ticket.access_token}`;
 
-                }
+        //         }
 
-            })
+        //     })
 
-            .catch(error => {
+        //     .catch(error => {
 
-                console.error(
-                    'Error checking device:',
-                    error
-                );
+        //         console.error(
+        //             'Error checking device:',
+        //             error
+        //         );
 
-            });
+        //     }); 
     </script>
 
 </body>
