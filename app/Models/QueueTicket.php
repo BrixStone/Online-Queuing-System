@@ -3,10 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use App\Models\TransactionRequest;
 
 class QueueTicket extends Model
 {
-    protected $table = 'queue_tickets1';
+    protected $table = 'queue_tickets';
 
     protected $fillable = [
         'name',
@@ -18,6 +20,7 @@ class QueueTicket extends Model
         'assigned_teller',
         'queue_date',
         'access_token',
+        'transaction_request_id',
     ];
 
     public const STATUS_HOLDING = 'holding';
@@ -26,6 +29,13 @@ class QueueTicket extends Model
     public const STATUS_COMPLETED = 'completed';
     public const STATUS_HELD = 'held';
 
+    protected $casts = [
+        'queue_date' => 'date',
+    ];
+
+    public function transactionRequest(): BelongsTo {
+        return $this->belongsTo(TransactionRequest::class, 'transaction_request_id');
+    }
     public function scopeHolding($query)
     {
         return $query->where('status', self::STATUS_HOLDING)->orderBy('created_at', 'asc');
