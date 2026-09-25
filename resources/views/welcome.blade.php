@@ -76,15 +76,15 @@
                     Home
                 </a>
 
-                <a href="#">
+                <a href="service">
                     Service
                 </a>
 
-                <a href="#">
+                <a href="Contact">
                     Contact
                 </a>
 
-                <a href="#">
+                <a href="about">
                     About
                 </a>
 
