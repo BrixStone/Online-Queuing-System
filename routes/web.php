@@ -8,6 +8,9 @@ use Livewire\Volt\Volt;
 Route::get('/', function () {
     return view('welcome');
 });
+Route::get('/tracking', function () {
+    return view('Tracking');
+});
 
 Volt::route('/cashier', 'cashier-dashboard');
 
