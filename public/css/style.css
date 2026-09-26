@@ -376,6 +376,7 @@ body {
     position: relative;
 
     width: 514px;
+    min-height: 560px;
     height: 560px;
 
     padding:

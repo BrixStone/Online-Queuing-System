@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use App\Models\TransactionRequest;
+use App\Models\Student;
+
 
 class QueueTicket extends Model
 {
@@ -12,6 +14,7 @@ class QueueTicket extends Model
 
 
     protected $fillable = [
+        'student_id',
         'name',
         'tracking_number',
         'device_id',
@@ -63,6 +66,14 @@ class QueueTicket extends Model
     | Relationships
     |--------------------------------------------------------------------------
     */
+    public function student(): BelongsTo
+    {
+        return $this->belongsTo(
+            Student::class,
+            'student_id'
+        );
+    }
+
 
     public function transactionRequest(): BelongsTo
     {
