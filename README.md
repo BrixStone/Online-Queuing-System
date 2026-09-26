@@ -27,20 +27,13 @@ A modern, efficient Online Queuing System built with Laravel and Livewire to str
 - **Teller Queue Management:** Comprehensive operations for tellers including calling the next ticket, holding, and completing current tickets.
 - **Smart Active Queue Balancing:** Automatically fills the active queue up to maximum capacity (default: 5) as tickets are served and completed.
 
-## Screenshots
-
-*(Drop your screenshot file into the `public` folder using the exact filename below and it will automatically appear here!)*
-
-**Home / Phone Verification:**
-<img src="public/home-page.png" alt="Home Page" width="800">
-
 ##  Tech Stack
 
 - **Framework:** Laravel 11.x
 - **Language:** PHP 8.3
 - **Frontend / Interactivity:** Livewire 3.x / Livewire Volt
 - **Testing:** Pest PHP
-- **Database:** SQLite (default) / MySQL / PostgreSQL
+- **Database:** Supabase (PostgreSQL)
 - **SMS Gateway:** TextBee API (for OTP verification)
 
 ## Prerequisites
@@ -49,7 +42,7 @@ Before you begin, ensure you have the following installed on your local machine:
 - **PHP** 8.3 or higher
 - **Composer** (Dependency manager for PHP)
 - **Node.js & npm** (For compiling frontend assets)
-- **Database** (SQLite, MySQL, or PostgreSQL)
+- **Database** (Supabase project & credentials)
 
 ##  Installation
 
@@ -57,8 +50,8 @@ Follow these steps to set up the project locally:
 
 1. **Clone the repository:**
    ```bash
-   git clone <your-repo-url>
-   cd Online-Queuing-System-andrew
+   git clone https://github.com/MysteriousTheory/Online-Queuing-System.git
+   cd Online-Queuing-System
    ```
 
 2. **Install Composer dependencies:**
@@ -79,8 +72,8 @@ Follow these steps to set up the project locally:
    ```
    *Open the newly created `.env` file and configure your Database connection and TextBee SMS API credentials:*
    ```env
-   DB_CONNECTION=sqlite
-   # Or configure MySQL/PostgreSQL if preferred
+   DB_CONNECTION=pgsql
+   # Add your Supabase Database credentials here (DB_HOST, DB_PORT, DB_DATABASE, etc.)
    
    TEXTBEE_API_KEY=your_textbee_api_key_here
    ```
