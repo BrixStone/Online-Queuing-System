@@ -376,7 +376,7 @@ body {
     position: relative;
 
     width: 514px;
-    height: 506px;
+    height: 560px;
 
     padding:
         102px
@@ -868,7 +868,7 @@ body {
 
     width: 418px;
     height: 92px;
-
+    margin-top: -14px;
     display: flex;
 
     flex-direction: column;
