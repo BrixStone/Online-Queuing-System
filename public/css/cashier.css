@@ -1,0 +1,719 @@
+/* =========================================================
+   RESET
+========================================================= */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html,
+body {
+    width: 100%;
+    min-height: 100%;
+}
+
+body {
+    font-family: "Inter", sans-serif;
+    overflow-x: hidden;
+    background: #0d1b3d;
+}
+
+
+/* =========================================================
+   PAGE
+========================================================= */
+
+.cashier-page {
+    position: relative;
+
+    width: 100%;
+    min-height: 900px;
+
+    overflow: hidden;
+
+    background:
+        linear-gradient(
+            180deg,
+            #1a3c8f 0%,
+            rgba(211, 47, 47, 0.53) 50%,
+            #0d1b3d 100%
+        );
+}
+
+
+/* =========================================================
+   ABSTRACT BACKGROUND
+========================================================= */
+
+.background {
+    position: absolute;
+
+    inset: -40px;
+
+    z-index: 0;
+
+    overflow: hidden;
+
+    background:
+        radial-gradient(
+            ellipse at 4% 15%,
+            rgba(211, 47, 47, 0.9) 0%,
+            rgba(211, 47, 47, 0) 17%
+        ),
+
+        radial-gradient(
+            ellipse at 90% 5%,
+            rgba(190, 20, 35, 0.9) 0%,
+            rgba(190, 20, 35, 0) 23%
+        ),
+
+        radial-gradient(
+            ellipse at 47% 58%,
+            rgba(210, 35, 55, 0.8) 0%,
+            rgba(210, 35, 55, 0) 27%
+        ),
+
+        radial-gradient(
+            ellipse at 82% 65%,
+            rgba(20, 66, 115, 0.9) 0%,
+            rgba(20, 66, 115, 0) 25%
+        ),
+
+        radial-gradient(
+            ellipse at 23% 90%,
+            rgba(196, 27, 42, 0.8) 0%,
+            rgba(196, 27, 42, 0) 24%
+        ),
+
+        linear-gradient(
+            135deg,
+            #123a70 0%,
+            #284b65 35%,
+            #671f2c 60%,
+            #102d55 100%
+        );
+
+    filter: blur(20px);
+
+    transform: scale(1.05);
+}
+
+
+.background-overlay {
+    position: absolute;
+
+    inset: 0;
+
+    z-index: 1;
+
+    background: rgba(40, 39, 39, 0.4);
+}
+
+
+/* =========================================================
+   MAIN BODY
+========================================================= */
+
+.main-body {
+    position: relative;
+
+    z-index: 2;
+
+    width: 100%;
+    min-height: 900px;
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.window-title {
+    position: absolute;
+
+    left: 53px;
+    top: 45px;
+
+    width: 302px;
+    height: 45px;
+
+    font-family: "Outfit", sans-serif;
+
+    font-size: 36px;
+    line-height: 45px;
+
+    font-weight: 700;
+
+    color: #ffffff;
+
+    text-align: center;
+}
+
+
+.top-button {
+    position: absolute;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border: none;
+
+    color: #ffffff;
+
+    font-family: "Inter", sans-serif;
+
+    font-size: 16px;
+    font-weight: 700;
+
+    border-radius: 12px;
+
+    box-shadow:
+        0 6px 12px rgba(26, 60, 143, 0.25);
+
+    cursor: default;
+}
+
+
+/* Close Window */
+
+.close-window {
+    left: 380px;
+    top: 53px;
+
+    width: 123px;
+    height: 34px;
+
+    background: #7f0204;
+}
+
+
+/* Log out */
+
+.logout {
+    right: 60px;
+    top: 53px;
+
+    width: 123px;
+    height: 34px;
+
+    background: #1a3c8f;
+}
+
+
+/* =========================================================
+   GLASS CARD
+========================================================= */
+
+.glass-card {
+    position: absolute;
+
+    background: rgba(255, 255, 255, 0.121569);
+
+    border: 1.5px solid rgba(255, 255, 255, 0.231373);
+
+    box-shadow:
+        0 16px 32px rgba(0, 0, 0, 0.247059);
+
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+
+    border-radius: 24px;
+}
+
+
+/* =========================================================
+   CURRENTLY SERVING
+========================================================= */
+
+.cashier-window {
+    left: 53px;
+    top: 110px;
+
+    width: 539px;
+    height: 357px;
+
+    padding: 24px 0 48px 12px;
+}
+
+
+.cashier-heading {
+    width: 314px;
+    height: 45px;
+
+    font-family: "Outfit", sans-serif;
+
+    font-size: 36px;
+    line-height: 45px;
+
+    font-weight: 700;
+
+    color: #ffffff;
+
+    text-align: center;
+}
+
+
+.cashier-divider {
+    position: absolute;
+
+    left: 12px;
+    top: 85px;
+
+    width: 515px;
+    height: 1px;
+
+    background: rgba(255, 255, 255, 0.23);
+}
+
+
+.empty-message {
+    position: absolute;
+
+    left: 66px;
+    top: 102px;
+
+    width: 362px;
+    height: 30px;
+
+    font-family: "Outfit", sans-serif;
+
+    font-size: 24px;
+    line-height: 30px;
+
+    font-weight: 100;
+
+    color: #ffffff;
+
+    text-align: center;
+}
+
+
+/* =========================================================
+   CASHIER BUTTONS
+========================================================= */
+
+.cashier-action {
+    position: absolute;
+
+    top: 268px;
+
+    width: 211px;
+    height: 62px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border: none;
+
+    border-radius: 12px;
+
+    background: #1a3c8f;
+
+    color: #ffffff;
+
+    font-family: "Inter", sans-serif;
+
+    font-size: 20px;
+    line-height: 24px;
+
+    font-weight: 700;
+
+    box-shadow:
+        0 6px 12px rgba(26, 60, 143, 0.25098);
+
+    cursor: default;
+}
+
+
+.call-next {
+    left: 39px;
+}
+
+
+.skip-student {
+    left: 289px;
+}
+
+
+/* =========================================================
+   ACTIVE LINE
+========================================================= */
+
+.active-line {
+    left: 616px;
+    top: 110px;
+
+    width: 373px;
+    height: 357px;
+
+    padding: 24px 0 48px 32px;
+}
+
+
+.active-heading {
+    width: 185px;
+    height: 45px;
+
+    font-family: "Outfit", sans-serif;
+
+    font-size: 36px;
+    line-height: 45px;
+
+    font-weight: 700;
+
+    color: #ffffff;
+
+    text-align: center;
+}
+
+
+.active-divider {
+    position: absolute;
+
+    left: 32px;
+    top: 85px;
+
+    width: 305px;
+    height: 1px;
+
+    background: rgba(255, 255, 255, 0.231373);
+}
+
+
+.active-student {
+    position: absolute;
+
+    left: 30px;
+    top: 100px;
+
+    width: 312px;
+    height: 92px;
+
+    display: flex;
+
+    align-items: center;
+
+    padding-left: 10px;
+
+    border-radius: 12px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #007b00 34.13%,
+            #00e100 83.65%
+        );
+
+    box-shadow:
+        0 6px 12px rgba(26, 60, 143, 0.25098);
+}
+
+
+.student-queue-text {
+    width: 283px;
+
+    color: #ffffff;
+
+    font-family: "Inter", sans-serif;
+
+    font-weight: 700;
+
+    font-size: 24px;
+
+    line-height: 29px;
+}
+
+
+.student-queue-name {
+    display: block;
+
+    font-size: 13px;
+
+    line-height: 16px;
+
+    font-weight: 400;
+}
+
+
+/* =========================================================
+   HOLDING LINE
+========================================================= */
+
+.holding-line {
+    left: calc(100% - 427px);
+    top: 110px;
+
+    width: 373px;
+    height: 749px;
+
+    padding: 24px 0 48px 32px;
+}
+
+
+.holding-heading {
+    width: 225px;
+    height: 45px;
+
+    font-family: "Outfit", sans-serif;
+
+    font-size: 36px;
+    line-height: 45px;
+
+    font-weight: 700;
+
+    color: #ffffff;
+
+    text-align: center;
+}
+
+
+.holding-divider {
+    position: absolute;
+
+    left: 32px;
+    top: 84px;
+
+    width: 305px;
+    height: 1px;
+
+    background: rgba(255, 255, 255, 0.231373);
+}
+
+
+/* =========================================================
+   STUDENT INFORMATION
+========================================================= */
+
+.student-info {
+    left: 53px;
+    top: 494px;
+
+    width: 936px;
+    height: 365px;
+
+    padding: 24px 0 48px 32px;
+}
+
+
+.student-info-heading {
+    width: 362px;
+    height: 45px;
+
+    font-family: "Outfit", sans-serif;
+
+    font-size: 36px;
+    line-height: 45px;
+
+    font-weight: 700;
+
+    color: #ffffff;
+
+    text-align: center;
+}
+
+
+.star {
+    position: absolute;
+
+    left: 395px;
+    top: 34px;
+
+    width: 33px;
+    height: 32px;
+
+    color: #d9d9d9;
+
+    font-size: 30px;
+    line-height: 32px;
+}
+
+
+.student-info-divider {
+    position: absolute;
+
+    left: 32px;
+    top: 70px;
+
+    width: 884px;
+    height: 1px;
+
+    background: rgba(255, 255, 255, 0.231373);
+}
+
+
+/* =========================================================
+   STUDENT FIELDS
+========================================================= */
+
+.student-fields {
+    position: absolute;
+
+    left: 32px;
+    top: 87px;
+
+    width: 884px;
+    height: 246px;
+}
+
+
+.field {
+    position: absolute;
+
+    height: 55px;
+}
+
+
+.field-label {
+    position: absolute;
+    top: 0;
+
+    color: #ffffff;
+
+    font-family: "Inter", sans-serif;
+
+    font-size: 13px;
+    line-height: 16px;
+
+    font-weight: 600;
+
+    white-space: nowrap;
+}
+
+
+
+.field-value {
+    position: absolute;
+
+    top: 25px;
+
+    padding-bottom: 6px;
+
+    color: rgba(171, 163, 163, 0.701961);
+
+    font-family: "Inter", sans-serif;
+
+    font-size: 12px;
+    line-height: 15px;
+
+    font-weight: 400;
+
+    border-bottom:
+        1px solid rgba(255, 255, 255, 0.231373);
+}
+
+
+/* =========================================================
+   USN
+========================================================= */
+
+.usn-field {
+    left: 0;
+    top: 33px;
+
+    width: 225px;
+}
+
+.usn-field .field-label {
+    width: auto;
+    white-space: nowrap;
+}
+
+.usn-field .field-value {
+    left: 0;
+    width: 225px;
+}
+
+
+/* =========================================================
+   FULL NAME
+========================================================= */
+
+.name-field {
+    left: 321px;
+    top: 33px;
+
+    width: 241px;
+}
+
+
+.name-field .field-value {
+    left: 0;
+
+    width: 241px;
+}
+
+
+/* =========================================================
+   ACADEMIC LEVEL
+========================================================= */
+
+.academic-field {
+    left: 643px;
+    top: 33px;
+
+    width: 241px;
+}
+
+
+.academic-field .field-value {
+    left: 0;
+
+    width: 241px;
+}
+
+
+/* =========================================================
+   YEAR LEVEL
+========================================================= */
+
+.year-field {
+    left: 0;
+    top: 123px;
+
+    width: 224px;
+}
+
+.year-field .field-value {
+    left: 0;
+    width: 224px;
+}
+
+
+
+
+/* =========================================================
+   COURSE
+========================================================= */
+
+.course-field {
+    left: 321px;
+    top: 123px;
+
+    width: 241px;
+}
+
+
+.course-field .field-value {
+    left: 0;
+
+    width: 241px;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 1200px) {
+
+    .cashier-page {
+        min-width: 1200px;
+    }
+
+}
