@@ -96,13 +96,31 @@ class PhoneVerificationController extends Controller
                 );
         }
 
+        /*
+        |--------------------------------------------------------------------------
+        | Mark phone number as verified
+        |--------------------------------------------------------------------------
+        */
+
         $verification->update([
             'verified' => true,
             'verified_at' => now(),
         ]);
 
+        /*
+        |--------------------------------------------------------------------------
+        | Create or retrieve today's queue ticket
+        |--------------------------------------------------------------------------
+        */
+
         $queue = DB::transaction(function () use ($registration) {
             $today = now()->toDateString();
+
+            /*
+            |--------------------------------------------------------------------------
+            | Check if student already has an active queue ticket today
+            |--------------------------------------------------------------------------
+            */
 
             $existingTicket = QueueTicket::where(
                 'queue_date',
@@ -124,10 +142,22 @@ class PhoneVerificationController extends Controller
                 return $existingTicket;
             }
 
+            /*
+            |--------------------------------------------------------------------------
+            | Get today's queue counter
+            |--------------------------------------------------------------------------
+            */
+
             $counter = DB::table('queue_counters')
                 ->where('queue_date', $today)
                 ->lockForUpdate()
                 ->first();
+
+            /*
+            |--------------------------------------------------------------------------
+            | Create queue counter if it doesn't exist
+            |--------------------------------------------------------------------------
+            */
 
             if (!$counter) {
                 DB::table('queue_counters')->insert([
@@ -142,6 +172,12 @@ class PhoneVerificationController extends Controller
                     ->lockForUpdate()
                     ->first();
             }
+
+            /*
+            |--------------------------------------------------------------------------
+            | Generate next queue number
+            |--------------------------------------------------------------------------
+            */
 
             $nextNumber = $counter->last_number + 1;
 
@@ -159,15 +195,33 @@ class PhoneVerificationController extends Controller
                 STR_PAD_LEFT
             );
 
+            /*
+            |--------------------------------------------------------------------------
+            | Get student
+            |--------------------------------------------------------------------------
+            */
+
             $student = Student::find(
                 $registration['student_id']
             );
+
+            /*
+            |--------------------------------------------------------------------------
+            | Create transaction request
+            |--------------------------------------------------------------------------
+            */
 
             $transactionRequest = TransactionRequest::create([
                 'student_id' => $registration['student_id'],
                 'description' => $registration['purpose'],
                 'status' => 'pending',
             ]);
+
+            /*
+            |--------------------------------------------------------------------------
+            | Create queue ticket
+            |--------------------------------------------------------------------------
+            */
 
             return QueueTicket::create([
                 'student_id' => $registration['student_id'],
@@ -183,7 +237,33 @@ class PhoneVerificationController extends Controller
             ]);
         });
 
+        /*
+        |--------------------------------------------------------------------------
+        | Fill available active queue slots
+        |--------------------------------------------------------------------------
+        |
+        | Maximum active tickets = 5.
+        |
+        | If there is an available slot, the newly created holding ticket
+        | will become active and the position SMS will be sent.
+        |
+        */
+
+        QueueTicket::maintainActiveQueue();
+
+        /*
+        |--------------------------------------------------------------------------
+        | Clear registration session
+        |--------------------------------------------------------------------------
+        */
+
         session()->forget('queue_registration');
+
+        /*
+        |--------------------------------------------------------------------------
+        | Redirect student to queue status page
+        |--------------------------------------------------------------------------
+        */
 
         return redirect()->route(
             'queue.status',
@@ -201,7 +281,10 @@ class PhoneVerificationController extends Controller
 
         if (!$registration) {
             return redirect('/')
-                ->with('error', 'Your registration session has expired.');
+                ->with(
+                    'error',
+                    'Your registration session has expired.'
+                );
         }
 
         $oldVerification = PhoneVerification::find(
@@ -232,6 +315,12 @@ class PhoneVerificationController extends Controller
                 );
         }
 
+        /*
+        |--------------------------------------------------------------------------
+        | Generate new OTP
+        |--------------------------------------------------------------------------
+        */
+
         $otp = (string) random_int(100000, 999999);
 
         $verification = PhoneVerification::create([
@@ -243,11 +332,23 @@ class PhoneVerificationController extends Controller
             'verified_at' => null,
         ]);
 
+        /*
+        |--------------------------------------------------------------------------
+        | OTP SMS message
+        |--------------------------------------------------------------------------
+        */
+
         $message =
             "ACLC Mandaue Queue\n\n" .
             "Your verification code is: {$otp}\n\n" .
             "This code expires in 5 minutes.\n" .
             "Do not share this code with anyone.";
+
+        /*
+        |--------------------------------------------------------------------------
+        | Send OTP
+        |--------------------------------------------------------------------------
+        */
 
         try {
             $textBee->sendSms(
@@ -263,6 +364,12 @@ class PhoneVerificationController extends Controller
                     'We could not send the verification code. Please try again.'
                 );
         }
+
+        /*
+        |--------------------------------------------------------------------------
+        | Update session with new verification ID
+        |--------------------------------------------------------------------------
+        */
 
         session([
             'queue_registration.verification_id' =>

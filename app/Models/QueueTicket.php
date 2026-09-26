@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use App\Models\TransactionRequest;
+use App\Services\QueueNotificationService;
 use App\Models\Student;
 
 
@@ -27,6 +28,7 @@ class QueueTicket extends Model
         'transaction_request_id',
         'serving_started_at',
         'arrived_at',
+        'last_notified_position',
     ];
 
 
@@ -119,22 +121,26 @@ class QueueTicket extends Model
     }
 
 
-
-
     public function startServing(?string $teller = null): void
     {
         $this->update([
             'status' => self::STATUS_SERVING,
-
             'assigned_teller' => $teller,
-
-            // Start the 3-minute countdown.
             'serving_started_at' => now(),
-
-            // Reset previous arrival confirmation.
             'arrived_at' => null,
         ]);
+
+        try {
+            $notificationService = app(
+                QueueNotificationService::class
+            );
+
+            $notificationService->sendServingSms($this);
+        } catch (\Throwable $e) {
+            report($e);
+        }
     }
+
 
 
 
@@ -215,49 +221,83 @@ class QueueTicket extends Model
 
     public static function maintainActiveQueue(): void
     {
-
-
         $activeCount = self::where(
             'status',
             self::STATUS_ACTIVE
         )->count();
 
-
-
-
         $slotsAvailable =
             self::MAX_ACTIVE - $activeCount;
 
+        if ($slotsAvailable > 0) {
 
-        if ($slotsAvailable <= 0) {
-            return;
+            $tickets = self::where(
+                'status',
+                self::STATUS_HOLDING
+            )
+                ->orderBy(
+                    'created_at',
+                    'asc'
+                )
+                ->limit(
+                    $slotsAvailable
+                )
+                ->get();
+
+            foreach ($tickets as $ticket) {
+
+                $ticket->update([
+                    'status' => self::STATUS_ACTIVE,
+                    'last_notified_position' => null,
+                ]);
+            }
         }
 
-
-
-
+        self::sendPositionNotifications();
+    }
+    public static function sendPositionNotifications(): void
+    {
         $tickets = self::where(
             'status',
-            self::STATUS_HOLDING
+            self::STATUS_ACTIVE
         )
             ->orderBy(
                 'created_at',
                 'asc'
             )
-            ->limit(
-                $slotsAvailable
-            )
             ->get();
 
+        $notificationService =
+            app(QueueNotificationService::class);
 
+        foreach ($tickets as $index => $ticket) {
 
-        foreach ($tickets as $ticket) {
+            $position = $index + 1;
 
-            $ticket->update([
-                'status' => self::STATUS_ACTIVE,
-            ]);
+            if (
+                $ticket->last_notified_position === $position
+            ) {
+                continue;
+            }
+
+            try {
+
+                $notificationService->sendPositionSms(
+                    $ticket,
+                    $position
+                );
+
+                $ticket->update([
+                    'last_notified_position' => $position,
+                ]);
+            } catch (\Throwable $e) {
+
+                report($e);
+            }
         }
     }
+
+
 
 
 
