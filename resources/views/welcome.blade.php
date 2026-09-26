@@ -236,8 +236,18 @@
 
                         <div class="input-underline">
 
-                            <input type="text" id="mobile_number" name="mobile_number"
-                                placeholder="Enter your mobile number">
+                            <input
+                                type="tel"
+                                id="mobile_number"
+                                name="mobile_number"
+                                placeholder="09XXXXXXXXX"
+                                value="{{ old('mobile_number') }}"
+                                maxlength="11"
+                                minlength="11"
+                                pattern="09[0-9]{9}"
+                                inputmode="numeric"
+                                required>
+
 
                         </div>
 
