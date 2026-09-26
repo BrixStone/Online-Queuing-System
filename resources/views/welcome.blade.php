@@ -228,7 +228,7 @@
 
                     <!-- MOBILE NUMBER -->
 
-                    <div class="form-field" id="mobileGroup" style="display: none;">
+                    <div class="form-field" id="mobileGroup">
 
                         <label for="mobile_number">
                             Mobile Number
@@ -370,13 +370,13 @@
         |--------------------------------------------------------------------------
         */
 
-        if (platform === 'ios') {
+        // if (platform === 'ios') {
 
-            document.getElementById(
-                'mobileGroup'
-            ).style.display = 'flex';
+        //     document.getElementById(
+        //         'mobileGroup'
+        //     ).style.display = 'flex';
 
-        }
+        // }
 
 
         /*
