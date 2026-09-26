@@ -11,6 +11,12 @@ Route::get('/', function () {
 Route::get('/tracking', function () {
     return view('Tracking');
 });
+Route::get('/cashier-login', function () {
+    return view('cashier-login');
+});
+Route::get('/cashier1', function () {
+    return view('cashier1');
+});
 
 Volt::route('/cashier', 'cashier-dashboard');
 

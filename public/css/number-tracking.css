@@ -316,9 +316,9 @@ body {
 ========================================================= */
 
 .icon-line {
-    width: 64px;
+    width: 57px;
 
-    margin-top: -18px;
+    margin-top: -12px;
     margin-left: 3px;
 }
 
@@ -592,9 +592,6 @@ body {
 }
 
 .hour {
-    width: 16px;
-    height: 20px;
-
     flex-shrink: 0;
 
     display: block;
@@ -603,6 +600,51 @@ body {
 }
 
 .reminder span {
+    display: block;
+
+    white-space: nowrap;
+}
+
+/* =========================================================
+   HourGlass
+========================================================= */
+
+.hour-glass {
+    position: absolute;
+
+    width: 100%;
+    height: 24px;
+
+    left: 50%;
+    bottom: -30px;
+
+    transform: translateX(-50%);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 10px;
+
+    color: #ffffff;
+
+    font-size: 16px;
+    line-height: 20px;
+
+    font-weight: 200;
+
+    text-align: center;
+}
+
+.glasshour {
+    flex-shrink: 0;
+
+    display: block;
+
+    margin: 0;
+}
+
+.hour-glass span {
     display: block;
 
     white-space: nowrap;
