@@ -4,10 +4,19 @@
 
 # Online Queuing System
 
+<p align="center">
+  <img src="https://img.shields.io/badge/Laravel-FF2D20?style=for-the-badge&logo=laravel&logoColor=white" alt="Laravel">
+  <img src="https://img.shields.io/badge/PHP-777BB4?style=for-the-badge&logo=php&logoColor=white" alt="PHP">
+  <img src="https://img.shields.io/badge/Livewire-4e56a6?style=for-the-badge&logo=livewire&logoColor=white" alt="Livewire">
+  <img src="https://img.shields.io/badge/License-MIT-blue?style=for-the-badge" alt="License">
+</p>
+
 A modern, efficient Online Queuing System built with Laravel and Livewire to streamline line management and optimize customer flow. This system is designed to provide real-time queue status updates, assign users to tellers, and manage queue progression dynamically.
 
 ##  Features
 
+- **Phone Number Verification:** Users must verify their mobile numbers via SMS OTP using the TextBee API before entering the queue.
+- **Live Queue Position:** Users can track their live position number in the queue.
 - **Automated Ticket Generation:** Automatically generates sequential tracking numbers (e.g., `TKT-001`) for new queue entries.
 - **Dynamic Status Tracking:** Monitors tickets through various lifecycle states:
   - `holding` (Waiting in the general queue)
@@ -18,6 +27,13 @@ A modern, efficient Online Queuing System built with Laravel and Livewire to str
 - **Teller Queue Management:** Comprehensive operations for tellers including calling the next ticket, holding, and completing current tickets.
 - **Smart Active Queue Balancing:** Automatically fills the active queue up to maximum capacity (default: 5) as tickets are served and completed.
 
+## Screenshots
+
+*(Drop your screenshot file into the `public` folder using the exact filename below and it will automatically appear here!)*
+
+**Home / Phone Verification:**
+<img src="public/home-page.png" alt="Home Page" width="800">
+
 ##  Tech Stack
 
 - **Framework:** Laravel 11.x
@@ -25,6 +41,15 @@ A modern, efficient Online Queuing System built with Laravel and Livewire to str
 - **Frontend / Interactivity:** Livewire 3.x / Livewire Volt
 - **Testing:** Pest PHP
 - **Database:** SQLite (default) / MySQL / PostgreSQL
+- **SMS Gateway:** TextBee API (for OTP verification)
+
+## Prerequisites
+
+Before you begin, ensure you have the following installed on your local machine:
+- **PHP** 8.3 or higher
+- **Composer** (Dependency manager for PHP)
+- **Node.js & npm** (For compiling frontend assets)
+- **Database** (SQLite, MySQL, or PostgreSQL)
 
 ##  Installation
 
@@ -52,6 +77,13 @@ Follow these steps to set up the project locally:
    cp .env.example .env
    php artisan key:generate
    ```
+   *Open the newly created `.env` file and configure your Database connection and TextBee SMS API credentials:*
+   ```env
+   DB_CONNECTION=sqlite
+   # Or configure MySQL/PostgreSQL if preferred
+   
+   TEXTBEE_API_KEY=your_textbee_api_key_here
+   ```
 
 5. **Run Database Migrations:**
    ```bash
@@ -63,6 +95,18 @@ Follow these steps to set up the project locally:
    php artisan serve
    ```
    Navigate to `http://localhost:8000` in your browser.
+
+##  Usage / Workflow
+
+Here is how the system handles the queuing flow from the user's perspective:
+
+1. **User Registration:** The user visits the home page and enters their mobile number.
+2. **OTP Verification:** An SMS containing an OTP is sent to the user via TextBee. The user enters this OTP to verify their identity.
+3. **Ticket Generation:** Upon successful verification, the system assigns them a unique tracking number (e.g., `TKT-005`) and places them in the `holding` queue.
+4. **Queue Progression:** The user can watch their live position dynamically update on their screen as tellers clear the queue.
+5. **Teller Calling:** A cashier/teller clicks "Call Next" on their dashboard, moving the user from `holding` to `serving`.
+6. **Check-In:** The user is notified it's their turn and must click the "Check In" button to confirm they are present at the window.
+7. **Completion:** Once the transaction is done, the teller marks the ticket as `completed`.
 
 ##  System Architecture
 
