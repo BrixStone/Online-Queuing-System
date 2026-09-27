@@ -132,7 +132,8 @@ class UserControllers extends Controller
             )->with(
                 'error',
                 'You already have an active queue ticket today: ' .
-                    $existingTicket->tracking_number
+                    $existingTicket->tracking_number .
+                    '. Redirecting you to your existing ticket.'
             );
         }
 
