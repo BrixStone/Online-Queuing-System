@@ -800,7 +800,7 @@ body {
 
 .serving-button:hover {
 
-    background: rgba(255, 255, 255, 0.28);
+    background: rgb(124, 0, 0);
 
     transform: translateY(-2px);
 
@@ -1294,7 +1294,7 @@ body {
 }
 
 .notification-button:hover {
-    background: #234cad;
+    background: #800000;
 
     transform: translateY(-2px);
 
@@ -1355,7 +1355,7 @@ body {
 }
 
 .cancel-button:hover {
-    background: #234cad;
+    background: #930000;
 
     transform: translateY(-2px);
 }
@@ -2018,4 +2018,19 @@ body {
         font-size: 8.5px;
         line-height: 13px;
     }
+}
+
+/* =========================================
+   METHOD 1: CANVAS BACKGROUND GRID
+========================================= */
+
+#bg-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 1;
+    pointer-events: none;
+    object-fit: fill;
 }

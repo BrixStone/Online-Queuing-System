@@ -2,8 +2,7 @@
    GOOGLE FONTS
 ========================================= */
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@700;800&display=swap');
-
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@700;800&display=swap");
 
 /* =========================================
    RESET
@@ -15,18 +14,15 @@
     box-sizing: border-box;
 }
 
-
 html,
 body {
     width: 100%;
     min-height: 100%;
 }
 
-
 html {
     scroll-behavior: smooth;
 }
-
 
 body {
     font-family: "Inter", sans-serif;
@@ -34,17 +30,13 @@ body {
     min-height: 100vh;
 
     overflow-x: hidden;
-
-    
 }
-
 
 /* =========================================
    REGISTER CONTAINER
 ========================================= */
 
 .register-container {
-
     position: relative;
 
     width: 100%;
@@ -62,73 +54,63 @@ body {
     background-blend-mode: multiply;
 }
 
-
 /* =========================================
    BACKGROUND IMAGE
 ========================================= */
 
 .background-image {
-
-    position: absolute;
-
-    left: -2.08%;
-    right: -2.08%;
-
-    top: -2.67%;
-    bottom: -5%;
-
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     z-index: -2;
 
+    /* Add your image URL here */
     background-image: url("../images/Regis_Back.svg");
 
     background-size: cover;
-
-    background-position: center;
-
+    background-position: center center;
     background-repeat: no-repeat;
 
     filter: blur(20px);
-
-    transform: scale(1.05);
+    transform: scale(1.3);
 }
-
 
 /* =========================================
    DARK OVERLAY
 ========================================= */
 
 .background-overlay {
+    position: fixed;
 
-    position: absolute;
-
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
-
-    left: 0;
-    top: 0;
 
     z-index: -1;
 
     background: #282727;
-
     opacity: 0.4;
 
     pointer-events: none;
 }
-
 
 /* =========================================
    NAVIGATION
 ========================================= */
 
 .register-nav {
-
     position: relative;
 
     width: 100%;
     height: 84px;
 
     padding: 24px 40px;
+
+    background: #00164d;
+    box-shadow: 0px 16px 32px rgba(0, 0, 0, 0.247059);
 
     display: flex;
 
@@ -141,13 +123,11 @@ body {
     z-index: 10;
 }
 
-
 /* =========================================
    ACLC LOGO GROUP
 ========================================= */
 
 .aclc-logo-group {
-
     display: flex;
 
     flex-direction: row;
@@ -171,13 +151,11 @@ body {
     height: 90px;
 }
 
-
 /* =========================================
    LOGO CIRCLE
 ========================================= */
 
 .logo-circle {
-
     position: relative;
 
     width: 36px;
@@ -198,9 +176,7 @@ body {
     flex-shrink: 0;
 }
 
-
 .logo-circle img {
-
     display: block;
 
     width: 100%;
@@ -211,13 +187,11 @@ body {
     border-radius: 50%;
 }
 
-
 /* =========================================
    LOGO TEXT
 ========================================= */
 
 .logo-info {
-
     display: flex;
 
     flex-direction: column;
@@ -230,9 +204,7 @@ body {
     height: 36px;
 }
 
-
 .logo-title {
-
     width: 48px;
     height: 23px;
 
@@ -243,12 +215,10 @@ body {
 
     font-weight: 800;
 
-    color: #FFFFFF;
+    color: #ffffff;
 }
 
-
 .logo-location {
-
     width: 78px;
     height: 12px;
 
@@ -261,32 +231,42 @@ body {
 
     text-transform: uppercase;
 
-    color: #FFFFFF;
+    color: #ffffff;
 }
-
 
 /* =========================================
    NAVIGATION LINKS
 ========================================= */
 
 .nav-links {
-
     display: flex;
-
     flex-direction: row;
 
     align-items: center;
+    justify-content: center;
 
     gap: 48px;
 
+    padding: 20px;
+    background: #1a3c8f;
+    box-shadow: 0px 16px 32px rgba(0, 0, 0, 0.247059);
+
     width: 330px;
     height: 17px;
+
+    margin-right: 0 auto;
+
+    border-radius: 10px;
+
+    transition: transform 0.2s ease;
 }
 
+.nav-links:hover {
+    transform: scale(1.01);
+}
 
 .nav-links a {
-
-    color: #FFFFFF;
+    color: #ffffff;
 
     text-decoration: none;
 
@@ -302,35 +282,94 @@ body {
         color 0.2s ease;
 }
 
-
 .nav-links a:not(.active) {
-
     opacity: 0.75;
 }
 
-
 .nav-links a:hover {
-
     opacity: 1;
 
-    color: #FFFFFF;
+    color: #ffffff;
 }
-
 
 .nav-links a.active {
+    width: auto;
+    max-width: 300px;
 
-    opacity: 1;
+    margin: 0;
 
-    color: #FFFFFF;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 17px;
+
+    display: flex;
+    align-items: center;
+
+    font-family: "Inter", sans-serif;
+
+    /* Gradient */
+    background: linear-gradient(90deg, #8b5cf6, #ec4899, #06b6d4, #8b5cf6);
+
+    /* Makes the gradient move */
+    background-size: 300% 100%;
+
+    /* Shows gradient only inside the text */
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+
+    /* Animation */
+    animation: gradient-flow 4s ease infinite;
 }
 
+@keyframes gradient-flow {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+/* ===== HOVER UNDERLINE ===== */
+.nav-links::after {
+    content: "";
+
+    background: repeating-linear-gradient(
+        to right,
+        #8b5cf6,
+        #ec4899,
+        #06b6d4,
+        #8b5cf6
+    );
+
+    border-radius: 100px;
+
+    width: 0;
+    height: 2px;
+
+    position: absolute;
+
+    bottom: -5px;
+    left: 0;
+
+    transition: 100ms;
+}
+
+.nav-links:hover::after {
+    width: 100%;
+}
 
 /* =========================================
    MAIN BODY
 ========================================= */
 
 .main-body {
-
     position: absolute;
 
     width: 100%;
@@ -348,32 +387,25 @@ body {
 
     align-items: center;
 
-    padding:
-        84px
-        20px
-        20px;
+    padding: 84px 20px 20px;
 
     z-index: 2;
 
     pointer-events: none;
 }
 
-
 /* =========================================
    GLASS REGISTRATION CARD
 ========================================= */
 
 .glass-registration-card {
-
     position: relative;
+    top: -20px;
 
     width: 514px;
     height: 570px;
 
-    padding:
-        102px
-        48px
-        48px;
+    padding: 102px 48px 48px;
 
     display: flex;
 
@@ -383,31 +415,11 @@ body {
 
     gap: 39px;
 
-    background:
-        rgba(
-            255,
-            255,
-            255,
-            0.121569
-        );
+    background: rgba(255, 255, 255, 0.121569);
 
-    border:
-        1.5px solid
-        rgba(
-            255,
-            255,
-            255,
-            0.231373
-        );
+    border: 1.5px solid rgba(255, 255, 255, 0.231373);
 
-    box-shadow:
-        0px 16px 32px
-        rgba(
-            0,
-            0,
-            0,
-            0.247059
-        );
+    box-shadow: 0px 16px 32px rgba(0, 0, 0, 0.247059);
 
     backdrop-filter: blur(12px);
 
@@ -420,6 +432,12 @@ body {
         transform 0.3s ease;
 
     pointer-events: auto;
+
+    transition: transform 0.2s ease;
+}
+
+.glass-registration-card:hover {
+    transform: scale(1.01);
 }
 
 /* =========================================
@@ -427,7 +445,6 @@ body {
 ========================================= */
 
 .card-header {
-
     width: 418px;
     height: 70px;
 
@@ -440,19 +457,16 @@ body {
     gap: 6px;
 }
 
-
 /* =========================================
    BADGE
 ========================================= */
 
 .badge-crest {
-
     width: 202px;
     height: 24px;
 
     margin-top: -20px;
-    padding:
-        4px 12px;
+    padding: 4px 12px;
 
     display: flex;
 
@@ -462,11 +476,11 @@ body {
 
     justify-content: center;
 
-    background: #1A3C8F;
+    background: #1a3c8f;
 
     border-radius: 100px;
 
-    color: #FFFFFF;
+    color: #ffffff;
 
     font-family: "Inter", sans-serif;
 
@@ -482,13 +496,11 @@ body {
     overflow: hidden;
 }
 
-
 /* =========================================
    REGISTRATION TITLE
 ========================================= */
 
 .card-header h1 {
-
     width: 100%;
     height: 40px;
 
@@ -501,18 +513,16 @@ body {
 
     text-align: center;
 
-    color: #FFFFFF;
+    color: #ffffff;
 
     white-space: nowrap;
 }
-
 
 /* =========================================
    REGISTRATION FORM
 ========================================= */
 
 .registration-form {
-
     width: 418px;
 
     display: flex;
@@ -522,13 +532,11 @@ body {
     gap: 20px;
 }
 
-
 /* =========================================
    FORM FIELD
 ========================================= */
 
 .form-field {
-
     width: 418px;
     height: 68px;
 
@@ -541,9 +549,7 @@ body {
     gap: 8px;
 }
 
-
 .form-field label {
-
     width: auto;
     height: 16px;
 
@@ -554,7 +560,7 @@ body {
 
     font-weight: 600;
 
-    color: #FFFFFF;
+    color: #ffffff;
 }
 
 .phone {
@@ -562,13 +568,11 @@ body {
     height: 16px;
 }
 
-
 /* =========================================
    INPUT UNDERLINE
 ========================================= */
 
 .input-underline {
-
     position: relative;
 
     width: 418px;
@@ -582,38 +586,20 @@ body {
 
     padding: 0;
 
-    border-bottom:
-        1px solid
-        rgba(
-            255,
-            255,
-            255,
-            0.231373
-        );
+    border-bottom: 1px solid rgba(255, 255, 255, 0.231373);
 
-    transition:
-        border-color 0.2s ease;
+    transition: border-color 0.2s ease;
 }
-
 
 .input-underline:focus-within {
-
-    border-bottom-color:
-        rgba(
-            255,
-            255,
-            255,
-            0.8
-        );
+    border-bottom-color: rgba(255, 255, 255, 0.8);
 }
-
 
 /* =========================================
    INPUT
 ========================================= */
 
 .input-underline input {
-
     width: 402px;
     height: 44px;
 
@@ -632,34 +618,22 @@ body {
 
     font-weight: 400;
 
-    color: #FFFFFF;
+    color: #ffffff;
 }
-
 
 .input-underline input::placeholder {
-
-    color:
-        rgba(
-            255,
-            255,
-            255,
-            0.701961
-        );
+    color: rgba(255, 255, 255, 0.701961);
 }
-
 
 .input-underline input:focus {
-
     outline: none;
 }
-
 
 /* =========================================
    USER ICON
 ========================================= */
 
 .user-icon {
-
     width: 16px;
     height: 16px;
 
@@ -681,13 +655,11 @@ body {
     display: block;
 }
 
-
 /* =========================================
    PHONE ICON
 ========================================= */
 
 .phone-icon {
-
     width: 16px;
     height: 16px;
 
@@ -696,21 +668,15 @@ body {
     display: block;
 }
 
-
 /* =========================================
    SELECT
 ========================================= */
 
 .input-underline select {
-
     width: 100%;
     height: 44px;
 
-    padding:
-        0
-        25px
-        0
-        0;
+    padding: 0 25px 0 0;
 
     border: none;
 
@@ -729,59 +695,44 @@ body {
 
     font-weight: 400;
 
-    color:
-        rgba(
-            255,
-            255,
-            255,
-            0.701961
-        );
+    color: rgba(255, 255, 255, 0.701961);
 
     cursor: pointer;
 }
 
-
 .input-underline select option {
-
     color: #222222;
 
-    background: #FFFFFF;
+    background: #ffffff;
 }
-
 
 /* =========================================
    SELECT ARROW
 ========================================= */
 
 .select-arrow {
-
     position: absolute;
 
     right: 5px;
     top: 15px;
 
-    width: 10px;
+    width: 100px;
     height: 10px;
 
-    border-right:
-        2px solid #FFFFFF;
+    border-right: 2px solid #ffffff;
 
-    border-bottom:
-        2px solid #FFFFFF;
+    border-bottom: 2px solid #ffffff;
 
-    transform:
-        rotate(45deg);
+    transform: rotate(45deg);
 
     pointer-events: none;
 }
-
 
 /* =========================================
    FORM ACTIONS
 ========================================= */
 
 .form-actions {
-
     width: 418px;
     height: 92px;
     margin-top: -14px;
@@ -794,15 +745,15 @@ body {
     gap: 20px;
 }
 
-
 /* =========================================
    REGISTER BUTTON
 ========================================= */
 
 .register-button {
-
     width: 418px;
     height: 48px;
+
+    margin-top: 2px;
 
     display: flex;
 
@@ -814,22 +765,15 @@ body {
 
     padding: 0;
 
-    background: #1A3C8F;
+    background: #1a3c8f;
 
     border: none;
 
-    box-shadow:
-        0px 6px 12px
-        rgba(
-            26,
-            60,
-            143,
-            0.25098
-        );
+    box-shadow: 0px 6px 12px rgba(26, 60, 143, 0.25098);
 
     border-radius: 12px;
 
-    color: #FFFFFF;
+    color: #ffffff;
 
     font-family: "Inter", sans-serif;
 
@@ -846,95 +790,44 @@ body {
         box-shadow 0.2s ease;
 }
 
-
 .register-button:hover {
+    background: #9a0202;
 
-    background: #234DA8;
+    box-shadow: 0px 8px 16px rgba(26, 60, 143, 0.35);
 
-    box-shadow:
-        0px 8px 16px
-        rgba(
-            26,
-            60,
-            143,
-            0.35
-        );
-
-    transform:
-        translateY(-1px);
+    transform: translateY(-1px);
 }
-
 
 .register-button:active {
+    transform: translateY(1px);
 
-    transform:
-        translateY(1px);
-
-    box-shadow:
-        0px 4px 8px
-        rgba(
-            26,
-            60,
-            143,
-            0.25
-        );
+    box-shadow: 0px 4px 8px rgba(26, 60, 143, 0.25);
 }
 
-
 .register-button:focus {
-
     outline: none;
 
     box-shadow:
-        0 0 0 3px
-        rgba(
-            255,
-            255,
-            255,
-            0.15
-        ),
-        0px 6px 12px
-        rgba(
-            26,
-            60,
-            143,
-            0.25098
-        );
+        0 0 0 3px rgba(55, 55, 255, 0.15),
+        0px 6px 12px rgba(0, 72, 255, 0.251);
 }
-
 
 /* =========================================
    SUCCESS MESSAGE
 ========================================= */
 
 .alert-success {
-
     width: 418px;
 
-    padding:
-        10px
-        14px;
+    padding: 10px 14px;
 
     border-radius: 8px;
 
-    background:
-        rgba(
-            46,
-            204,
-            113,
-            0.18
-        );
+    background: rgba(46, 204, 113, 0.18);
 
-    border:
-        1px solid
-        rgba(
-            46,
-            204,
-            113,
-            0.35
-        );
+    border: 1px solid rgba(46, 204, 113, 0.35);
 
-    color: #FFFFFF;
+    color: #ffffff;
 
     font-family: "Inter", sans-serif;
 
@@ -943,21 +836,17 @@ body {
     line-height: 18px;
 }
 
-
 /* =========================================
    HIDDEN CARD
 ========================================= */
 
 .glass-registration-card.hidden {
-
     opacity: 0;
 
-    transform:
-        scale(0.95);
+    transform: scale(0.95);
 
     pointer-events: none;
 }
-
 
 /* =========================================
    ACCESSIBILITY
@@ -966,58 +855,38 @@ body {
 button,
 input,
 select {
-
     font: inherit;
 }
-
 
 button:focus-visible,
 a:focus-visible,
 input:focus-visible,
 select:focus-visible {
-
-    outline:
-        2px solid
-        rgba(
-            255,
-            255,
-            255,
-            0.8
-        );
+    outline: 2px solid rgba(255, 255, 255, 0.8);
 
     outline-offset: 3px;
 }
-
 
 /* =========================================
    RESPONSIVE
 ========================================= */
 
 @media (max-width: 768px) {
-
     .register-nav {
-
-        padding:
-            20px 24px;
+        padding: 20px 24px;
     }
 
-
     .nav-links {
-
         gap: 22px;
 
         width: auto;
     }
 
-
     .nav-links a {
-
         font-size: 13px;
     }
 
-
     .glass-registration-card {
-
         width: 100%;
 
         max-width: 514px;
@@ -1027,99 +896,73 @@ select:focus-visible {
         padding-right: 32px;
     }
 
-
     .card-header,
     .registration-form {
-
         width: 100%;
     }
-
 
     .form-field,
     .input-underline,
     .register-button,
     .form-actions,
     .alert-success {
-
         width: 100%;
     }
 
-
     .input-underline input {
-
         width: calc(100% - 20px);
     }
 
-
     .card-header h1 {
-
         font-size: 28px;
     }
 }
-
 
 /* =========================================
    MOBILE
 ========================================= */
 
 @media (max-width: 560px) {
-
     .register-nav {
-
         height: 70px;
 
-        padding:
-            18px 20px;
+        padding: 18px 20px;
     }
 
-
     .nav-links {
-
         gap: 14px;
     }
 
-
     .nav-links a:nth-child(3),
     .nav-links a:nth-child(4) {
-
         display: none;
     }
 
-
     .main-body {
-
-        padding:
-            90px 16px 20px;
+        padding: 90px 16px 20px;
     }
 
-
     .glass-registration-card {
-
         width: 100%;
 
         height: auto;
 
         min-height: 506px;
 
-        padding:
-            80px 24px 32px;
+        padding: 80px 24px 32px;
 
         border-radius: 20px;
 
         gap: 30px;
     }
 
-
     .card-header {
-
         height: auto;
 
         min-height: 70px;
     }
 
-
     .card-header h1 {
-
         width: 100%;
 
         height: auto;
@@ -1131,123 +974,91 @@ select:focus-visible {
         white-space: normal;
     }
 
-
     .badge-crest {
-
         width: 190px;
 
         font-size: 10px;
     }
 
-
     .registration-form {
-
         gap: 20px;
     }
 
-
     .form-field {
-
         height: 68px;
     }
 
-
     .form-actions {
-
         height: 92px;
     }
 
-
     .register-button {
-
         height: 48px;
 
         font-size: 15px;
     }
 }
 
-
 /* =========================================
    VERY SMALL DEVICES
 ========================================= */
 
 @media (max-width: 380px) {
-
     .logo-info {
-
         display: none;
     }
 
-
     .nav-links {
-
         gap: 12px;
     }
 
-
     .nav-links a {
-
         font-size: 12px;
     }
 
-
     .glass-registration-card {
-
         padding-left: 20px;
 
         padding-right: 20px;
     }
 
-
     .card-close {
-
         right: 18px;
 
         top: 18px;
     }
 
-
     .badge-crest {
-
         width: 180px;
 
         font-size: 9px;
     }
 
-
     .card-header h1 {
-
         font-size: 23px;
 
         line-height: 30px;
     }
 }
 
-
 /* =========================================
    HEIGHT RESPONSIVENESS
 ========================================= */
 
 @media (max-height: 700px) and (min-width: 561px) {
-
     .glass-registration-card {
-
-        transform:
-            scale(0.9);
+        transform: scale(0.9);
     }
 }
-
 
 /* =========================================
    REDUCED MOTION
 ========================================= */
 
 @media (prefers-reduced-motion: reduce) {
-
     *,
     *::before,
     *::after {
-
         scroll-behavior: auto !important;
 
         transition-duration: 0.01ms !important;
@@ -1258,3 +1069,16 @@ select:focus-visible {
     }
 }
 
+/* =========================================
+   METHOD 1: CANVAS BACKGROUND GRID
+========================================= */
+
+#bg-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    pointer-events: none;
+}

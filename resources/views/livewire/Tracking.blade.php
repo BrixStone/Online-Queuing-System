@@ -101,6 +101,30 @@ $imHere = function () {
 
     <link rel="stylesheet" href="{{ asset('css/number-tracking.css') }}">
 
+    <style>
+        .number-tracking {
+            position: relative;
+            width: 100%;
+            min-height: 100vh;
+        }
+
+        /* Position canvas fixed over background elements but behind main content */
+        #bg-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .main-body {
+            position: relative;
+            z-index: 2;
+        }
+    </style>
+
 </head>
 
 
@@ -122,6 +146,12 @@ $imHere = function () {
             <div class="background-gradient"></div>
 
         </div>
+
+        <!-- ========================================================= -->
+        <!-- Interactive Canvas Background Grid -->
+        <!-- ========================================================= -->
+
+        <canvas id="bg-canvas"></canvas>
 
 
         <!-- ========================================================= -->
@@ -291,13 +321,13 @@ $imHere = function () {
                     <div class="hour-glass">
 
 
-                        <svg class="glasshour" width="25" height="32" xmlns="http://www.w3.org/2000/svg" 
-                        viewBox="0 0 640 640">
-                            
+                        <svg class="glasshour" width="25" height="32" xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 640 640">
+
                             <path fill="rgb(255, 255, 255)"
                                 d="M160 64C142.3 64 128 78.3 128 96C128 113.7 142.3 128 160 128L160 139C160 181.4 176.9 222.1 206.9 252.1L274.8 320L206.9 387.9C176.9 417.9 160 458.6 160 501L160 512C142.3 512 128 526.3 128 544C128 561.7 142.3 576 160 576L480 576C497.7 576 512 561.7 512 544C512 526.3 497.7 512 480 512L480 501C480 458.6 463.1 417.9 433.1 387.9L365.2 320L433.1 252.1C463.1 222.1 480 181.4 480 139L480 128C497.7 128 512 113.7 512 96C512 78.3 497.7 64 480 64L160 64zM416 501L416 512L224 512L224 501C224 475.5 234.1 451.1 252.1 433.1L320 365.2L387.9 433.1C405.9 451.1 416 475.5 416 501z" />
-                        
-                            </svg>
+
+                        </svg>
 
                         <span>
                             WE'LL NOTIFY YOU WHEN IT'S YOUR TURN
@@ -376,6 +406,111 @@ $imHere = function () {
         </main>
 
     </div>
+
+    <!-- =========================================
+         JAVASCRIPT
+    ========================================== -->
+
+    <script>
+        /*
+    |--------------------------------------------------------------------------
+    | INTERACTIVE CANVAS GRID BACKGROUND (FIXED OFFSET & ASPECT RATIO)
+    |--------------------------------------------------------------------------
+    */
+        const canvas = document.getElementById('bg-canvas');
+        const ctx = canvas.getContext('2d');
+
+        const squareSize = 30;
+        const gap = 2;
+        const radius = 50; // Increased radius slightly for smoother interaction
+        const fadeSpeed = 0.02;
+
+        // Brand Palette
+        const palette = ['#00164D', '#1A3C8F', '#9A0202', '#DC2626', '#FFFFFF'];
+
+        let cols = 0;
+        let rows = 0;
+        let grid = [];
+        let mouse = {
+            x: -1000,
+            y: -1000
+        };
+
+        // Convert HEX colors to RGBA
+        function getRgba(hex, alpha) {
+            const r = parseInt(hex.slice(1, 3), 16);
+            const g = parseInt(hex.slice(3, 5), 16);
+            const b = parseInt(hex.slice(5, 7), 16);
+            return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+        }
+
+        function resizeCanvas() {
+            // Match canvas pixel resolution exactly to screen viewport width/height
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            cols = Math.ceil(canvas.width / (squareSize + gap)) + 1;
+            rows = Math.ceil(canvas.height / (squareSize + gap)) + 1;
+
+            grid = [];
+            for (let r = 0; r < rows; r++) {
+                for (let c = 0; c < cols; c++) {
+                    grid.push({
+                        x: c * (squareSize + gap),
+                        y: r * (squareSize + gap),
+                        intensity: 0,
+                        color: palette[Math.floor(Math.random() * palette.length)]
+                    });
+                }
+            }
+        }
+
+        // Track mouse position directly relative to the viewport window
+        window.addEventListener('mousemove', (e) => {
+            mouse.x = e.clientX;
+            mouse.y = e.clientY;
+        });
+
+        window.addEventListener('mouseleave', () => {
+            mouse.x = -1000;
+            mouse.y = -1000;
+        });
+
+        function animateGrid() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            grid.forEach((sq) => {
+                const squareCenterX = sq.x + squareSize / 2;
+                const squareCenterY = sq.y + squareSize / 2;
+                const dist = Math.hypot(mouse.x - squareCenterX, mouse.y - squareCenterY);
+
+                if (dist < radius) {
+                    const targetIntensity = 1 - dist / radius;
+                    if (targetIntensity > sq.intensity) {
+                        sq.intensity = targetIntensity;
+                    }
+                } else {
+                    sq.intensity = Math.max(0, sq.intensity - fadeSpeed);
+                }
+
+                ctx.shadowBlur = 0;
+
+                if (sq.intensity > 0) {
+                    ctx.fillStyle = getRgba(sq.color, sq.intensity * 0.85);
+                } else {
+                    ctx.fillStyle = 'rgba(255, 255, 255, 0.05)';
+                }
+
+                ctx.fillRect(sq.x, sq.y, squareSize, squareSize);
+            });
+
+            requestAnimationFrame(animateGrid);
+        }
+
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+        animateGrid();
+    </script>
 
 </body>
 
