@@ -255,15 +255,20 @@ $cancelTicket = function () {
 {{-- Warning --}}
 {{-- ================================================================ --}}
 
-@if (session('warning'))
+@if (session('error'))
 
 <script>
-    alert(
-        @js(session('warning'))
-    );
+    document.addEventListener('DOMContentLoaded', function () {
+
+        alert(
+            @js(session('error'))
+        );
+
+    });
 </script>
 
 @endif
+
 
 
 <div class="number-tracking">
@@ -378,7 +383,7 @@ $cancelTicket = function () {
         {{-- ======================================================== --}}
         {{-- Error Message --}}
         {{-- ======================================================== --}}
-
+<!-- 
         @if(session('error'))
 
         <div class="queue-error-message">
@@ -387,7 +392,7 @@ $cancelTicket = function () {
 
         </div>
 
-        @endif
+        @endif -->
 
 
         {{-- ======================================================== --}}
@@ -424,15 +429,6 @@ $cancelTicket = function () {
                     POSITION
 
                 </div>
-
-                @else
-
-                <div class="position-title">
-
-                    QUEUE STATUS
-
-                </div>
-
                 @endif
 
 
@@ -754,7 +750,7 @@ $cancelTicket = function () {
                         QueueTicket::STATUS_HOLDING
                         )
 
-                        PLEASE WAIT. WE'LL NOTIFY YOU WHEN
+                        PLEASE WAIT. WE'LL NOTIFY YOU WHEN<br>
                         YOU ARE CLOSE TO BEING SERVED.
 
 
@@ -763,7 +759,7 @@ $cancelTicket = function () {
                         QueueTicket::STATUS_ACTIVE
                         )
 
-                        YOU ARE CLOSE TO BEING SERVED.
+                        YOU ARE CLOSE TO BEING SERVED.<br>
                         PLEASE STAY NEARBY.
 
 
@@ -901,10 +897,10 @@ $cancelTicket = function () {
 
                         <div
                             id="arrival-countdown"
-                            data-expires-at="{{ $queue->serving_started_at->copy()->addMinutes(5)->toIso8601String() }}"
+                            data-expires-at="{{ $queue->serving_started_at->copy()->addMinutes(3)->toIso8601String() }}"
                             class="serving-countdown">
 
-                            05:00
+                            03:00
 
                         </div>
 
@@ -978,14 +974,14 @@ $cancelTicket = function () {
 
                 <div class="star">
 
-                    ★
+                    
 
                 </div>
 
 
                 <div class="how-to-title">
 
-                    HOW TO KNOW IT'S YOUR TURN
+                    ★ HOW TO KNOW IT'S YOUR TURN
 
                 </div>
 
@@ -1003,7 +999,7 @@ $cancelTicket = function () {
 
                 <br><br>
 
-                When your ticket is <strong>ACTIVE</strong>, you will
+                When your position is <strong>#5</strong>, you will
                 receive an SMS with your queue position.
 
                 <br><br>
@@ -1014,10 +1010,10 @@ $cancelTicket = function () {
 
                 <br><br>
 
-                Click <strong>I'm Here</strong> within
-                <strong>5 minutes</strong> to confirm your arrival.
+                Press <strong>I'm Here</strong> within
+                <strong>3 minutes</strong> to confirm your arrival.
                 Otherwise, your ticket will be marked
-                <strong>NO SHOW</strong>.
+                <strong>NO SHOW</strong>. 
 
             </div>
 
@@ -1252,7 +1248,7 @@ $cancelTicket = function () {
                     if (message) {
 
                         message.textContent =
-                            'Your 5-minute arrival time has expired.';
+                            'Your 3-minute arrival time has expired.';
 
                     }
 

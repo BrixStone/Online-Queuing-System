@@ -1789,7 +1789,7 @@ body {
         width: 90%;
 
         left: 50%;
-        bottom: 4px;
+        bottom: -8px;
 
         transform: translateX(-50%);
 
@@ -1863,7 +1863,7 @@ body {
         left: auto;
         top: auto;
 
-        transform: none;
+        transform: translateY(-45px);
 
         padding: 13px 16px 55px;
 
