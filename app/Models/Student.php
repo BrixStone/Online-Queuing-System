@@ -5,10 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Student extends Model
 {
-    use HasUuids;
+    use HasUuids, HasFactory;
 
     protected $table = 'students';
 
@@ -18,7 +19,7 @@ class Student extends Model
         'last_name',
         'academic_level',
         'year_level',
-        'course',
+        'course_or_strand',
     ];
 
     public function transactionRequests(): HasMany

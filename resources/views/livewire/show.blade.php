@@ -2,6 +2,8 @@
 
 use function Livewire\Volt\{state, mount};
 use App\Models\QueueTicket;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 state([
     'token' => null,
@@ -220,6 +222,69 @@ $cancelTicket = function () {
         'success',
         'Your queue ticket has been cancelled.'
     );
+};
+
+/*
+|--------------------------------------------------------------------------
+| Auto-Requeue No Show
+|--------------------------------------------------------------------------
+*/
+
+$requeueNoShow = function () {
+    if (!$this->queue || $this->queue->status !== QueueTicket::STATUS_NO_SHOW) {
+        return;
+    }
+
+    DB::transaction(function () {
+        $today = now()->toDateString();
+        
+        $counter = DB::table('queue_counters')
+            ->where('queue_date', $today)
+            ->lockForUpdate()
+            ->first();
+
+        if (!$counter) {
+            DB::table('queue_counters')->insert([
+                'queue_date' => $today,
+                'last_number' => 0,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+
+            $counter = DB::table('queue_counters')
+                ->where('queue_date', $today)
+                ->lockForUpdate()
+                ->first();
+        }
+
+        $nextNumber = $counter->last_number + 1;
+
+        DB::table('queue_counters')
+            ->where('id', $counter->id)
+            ->update([
+                'last_number' => $nextNumber,
+                'updated_at' => now(),
+            ]);
+
+        $trackingNumber = 'A' . str_pad($nextNumber, 3, '0', STR_PAD_LEFT);
+
+        $newTicket = QueueTicket::create([
+            'student_id' => $this->queue->student_id,
+            'name' => $this->queue->name,
+            'mobile_number' => $this->queue->mobile_number,
+            'device_id' => $this->queue->device_id,
+            'platform' => $this->queue->platform,
+            'tracking_number' => $trackingNumber,
+            'status' => QueueTicket::STATUS_HOLDING,
+            'access_token' => (string) Str::uuid(),
+            'queue_date' => $today,
+            'transaction_request_id' => $this->queue->transaction_request_id,
+        ]);
+
+        QueueTicket::maintainActiveQueue();
+
+        $this->redirect(route('queue.status', ['token' => $newTicket->access_token]));
+    });
 };
 
 ?>
@@ -655,7 +720,7 @@ $cancelTicket = function () {
                         QueueTicket::STATUS_ACTIVE
                         )
 
-                        PLEASE STAND BY
+                        PLEASE GO TO THE CASHIER COUNTER NOW
 
 
                         @elseif(
@@ -760,7 +825,6 @@ $cancelTicket = function () {
                         )
 
                         YOU ARE CLOSE TO BEING SERVED.<br>
-                        PLEASE STAY NEARBY.
 
 
                         @elseif(
@@ -813,6 +877,21 @@ $cancelTicket = function () {
 
 
                     </span>
+
+                    @if(($this->queue->status ?? '') === QueueTicket::STATUS_COMPLETED)
+                        <div style="margin-top: 2rem; display: flex; justify-content: center;">
+                            <a href="/" style="text-decoration: none; padding: 12px 24px; background: rgba(255, 255, 255, 0.2); color: white; border-radius: 30px; font-weight: bold; border: 2px solid rgba(255, 255, 255, 0.4); backdrop-filter: blur(5px); box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); transition: all 0.3s ease;">
+                                Get Another Tracking Number
+                            </a>
+                        </div>
+                    @elseif(($this->queue->status ?? '') === QueueTicket::STATUS_NO_SHOW)
+                        <div style="margin-top: 2rem; display: flex; justify-content: center;">
+                            <button wire:click="requeueNoShow" wire:loading.attr="disabled" style="padding: 12px 24px; background: rgba(220, 53, 69, 0.8); color: white; border: 2px solid rgba(255, 255, 255, 0.4); border-radius: 30px; font-weight: bold; cursor: pointer; backdrop-filter: blur(5px); box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); transition: all 0.3s ease;">
+                                <span wire:loading.remove wire:target="requeueNoShow">Requeue (Get Another Number)</span>
+                                <span wire:loading wire:target="requeueNoShow">Requeuing...</span>
+                            </button>
+                        </div>
+                    @endif
 
 
                 </div>

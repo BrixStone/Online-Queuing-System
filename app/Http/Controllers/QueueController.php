@@ -92,6 +92,19 @@ class QueueController extends Controller
         return $serving;
     }
 
+    public function skipCurrent(string $tellerName)
+    {
+        $serving = QueueTicket::serving()
+            ->where('assigned_teller', $tellerName)
+            ->first();
+
+        if ($serving) {
+            $serving->markNoShow();
+        }
+
+        return $serving;
+    }
+
     public function completeCurrent(string $tellerName)
     {
         $serving = QueueTicket::serving()

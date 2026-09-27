@@ -91,6 +91,23 @@ new class extends Component {
         $this->loadActiveTicket();
     }
 
+    public function skipCurrent()
+    {
+        app(QueueController::class)->skipCurrent($this->tellerName);
+        $this->loadActiveTicket();
+    }
+
+    public function canMarkNoShow()
+    {
+        if (!$this->activeTicket || !$this->activeTicket->serving_started_at) {
+            return false;
+        }
+
+        $expiresAt = $this->activeTicket->serving_started_at->copy()->addMinutes(QueueTicket::ARRIVAL_MINUTES);
+        
+        return now()->greaterThanOrEqualTo($expiresAt);
+    }
+
     public function with()
     {
         return [
@@ -101,115 +118,231 @@ new class extends Component {
 };
 ?>
 
-<div class="p-8 font-sans" wire:poll.2s>
+<div wire:poll.2s>
     @if(!$isAuthenticated)
-        <div class="max-w-md mx-auto mt-20 bg-white p-8 rounded-xl border-2 border-gray-200 shadow-sm text-center">
-            <h2 class="text-2xl font-bold mb-6 text-gray-800">Cashier Login</h2>
-            <p class="text-gray-600 mb-6">Please enter your PIN to access the dashboard.</p>
-            
-            @if (session()->has('auth_error'))
-                <div class="bg-red-100 text-red-700 p-3 mb-6 rounded border border-red-300 font-medium text-sm">
-                    {{ session('auth_error') }}
-                </div>
-            @endif
+        <!-- Inject required CSS/Fonts for the cashier-login layout -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Outfit:wght@100;400;700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="{{ asset('css/cashier-login.css') }}">
 
-            <form wire:submit="authenticate">
-                <input 
-                    type="password" 
-                    wire:model="pinInput" 
-                    class="w-full text-center text-3xl tracking-[1em] p-4 mb-6 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-100 transition"
-                    placeholder="••••"
-                    maxlength="4"
-                    required
-                    autofocus
-                >
-                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white px-6 py-4 rounded-lg font-bold text-lg transition shadow-md">
-                    Enter Dashboard
-                </button>
-            </form>
+        <div class="cashier-login">
+            <!-- Background -->
+            <div class="background"></div>
+            <div class="background-overlay"></div>
+
+            <!-- Main Content -->
+            <main class="main-body">
+                <!-- Glass Login Card -->
+                <section class="glass-card">
+                    
+                    <!-- Header -->
+                    <header class="card-header">
+                        <h1 class="card-title">QUEUE STATUS</h1>
+                        <p class="card-subtitle">Please enter PIN to access the dashboard</p>
+                    </header>
+
+                    @if (session()->has('auth_error'))
+                        <div style="color: #dc3545; text-align: center; margin-bottom: 1rem; font-weight: bold; background: rgba(255, 255, 255, 0.8); padding: 5px; border-radius: 5px;">
+                            {{ session('auth_error') }}
+                        </div>
+                    @endif
+
+                    <!-- Form -->
+                    <form wire:submit="authenticate" class="form-actions">
+                        
+                        <!-- PIN Input (Replacing the static spans with a working input) -->
+                        <div class="pin-box" style="padding: 0; background: transparent; border: none; box-shadow: none;">
+                            <input 
+                                type="password" 
+                                wire:model="pinInput" 
+                                style="width: 100%; text-align: center; font-size: 2rem; letter-spacing: 0.5em; padding: 15px; border-radius: 12px; border: 2px solid rgba(255, 255, 255, 0.3); background: rgba(255, 255, 255, 0.1); color: white; outline: none;"
+                                placeholder="••••"
+                                maxlength="4"
+                                required
+                                autofocus
+                            >
+                        </div>
+
+                        <!-- Enter Button -->
+                        <button type="submit" class="enter-button">
+                            Enter Dashboard
+                        </button>
+
+                    </form>
+                </section>
+            </main>
+
+            <!-- Watermark -->
+            <div class="watermark">
+                <img class="icon-line" src="{{ asset('images/ACLC_logo.svg') }}" alt="Line">
+            </div>
         </div>
     @else
-        <div class="flex justify-between items-center mb-6">
-            <div class="flex items-center gap-4">
-                <h1 class="text-3xl font-bold text-gray-800">Cashier: {{ $tellerName }}</h1>
-                <button wire:click="toggleWindow" class="px-4 py-2 rounded-lg font-bold text-white transition shadow-sm {{ $isOpen ? 'bg-red-500 hover:bg-red-600' : 'bg-green-500 hover:bg-green-600' }}">
+        <!-- Inject required CSS/Fonts for the cashier layout -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Outfit:wght@100;400;700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="{{ asset('css/cashier.css') }}">
+        
+        <style>
+            .glass-scrollbar::-webkit-scrollbar {
+                width: 8px;
+            }
+            .glass-scrollbar::-webkit-scrollbar-track {
+                background: rgba(255, 255, 255, 0.05); 
+                border-radius: 10px;
+            }
+            .glass-scrollbar::-webkit-scrollbar-thumb {
+                background: rgba(255, 255, 255, 0.3); 
+                border-radius: 10px;
+            }
+            .glass-scrollbar::-webkit-scrollbar-thumb:hover {
+                background: rgba(255, 255, 255, 0.5); 
+            }
+        </style>
+
+        <div class="cashier-page">
+            <div class="background"></div>
+            <div class="background-overlay"></div>
+
+            <main class="main-body">
+
+                <!-- HEADER -->
+                <div class="window-title">
+                    Cashier: {{ $tellerName }}
+                </div>
+
+                <button wire:click="toggleWindow" class="top-button close-window" style="{{ $isOpen ? 'background-color: #dc3545;' : 'background-color: #28a745;' }}">
                     {{ $isOpen ? 'Close Window' : 'Open Window' }}
                 </button>
-            </div>
-            <button wire:click="logout" class="text-red-600 hover:text-red-800 font-semibold underline">Log Out</button>
-        </div>
 
-        @if (session()->has('error'))
-            <div class="bg-red-100 text-red-700 p-4 mb-6 rounded border border-red-300 font-medium">
-                {{ session('error') }}
-            </div>
-        @endif
+                <button wire:click="logout" class="top-button logout">
+                    Log out
+                </button>
 
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-            <div class="md:col-span-2 bg-gray-50 p-8 rounded-xl border-2 border-gray-200 shadow-sm">
-                <h2 class="text-xl mb-6 font-semibold text-gray-600 uppercase tracking-wide">Currently Serving</h2>
-                
-                @if($activeTicket)
-                    <div class="mb-8 text-center bg-white p-6 rounded-lg shadow-sm border border-gray-100">
-                        <p class="text-7xl font-black text-gray-900 mb-2">{{ $activeTicket->tracking_number }}</p>
-                        <p class="text-2xl text-gray-600">{{ $activeTicket->name }}</p>
-                    </div>
-                    
-                    <div class="flex gap-4">
-                        <button wire:click="completeCurrent" class="flex-1 bg-green-600 hover:bg-green-700 text-white px-6 py-4 rounded-lg font-bold text-lg transition shadow-md">
-                            ✅ Complete Transaction
-                        </button>
-                        <button wire:click="holdCurrent" class="bg-yellow-500 hover:bg-yellow-600 text-white px-6 py-4 rounded-lg font-bold text-lg transition shadow-md">
-                            ⏸️ No Show (Hold)
-                        </button>
-                    </div>
-                @else
-                    <div class="text-center py-12">
-                        <p class="text-gray-500 mb-8 text-xl">No one is currently at your window.</p>
+                <!-- CURRENTLY SERVING -->
+                <section class="glass-card cashier-window">
+                    <h1 class="cashier-heading">Currently Serving</h1>
+                    <div class="cashier-divider"></div>
+
+                    @if (session()->has('error'))
+                        <p style="color: #dc3545; text-align: center; margin-bottom: 1rem; font-weight: bold;">
+                            {{ session('error') }}
+                        </p>
+                    @endif
+
+                    @if($activeTicket)
+                        <div class="active-student" style="text-align: center; margin-bottom: 2rem;">
+                            <p style="font-size: 4rem; font-weight: bold; margin: 0; color: #1f2937;">{{ $activeTicket->tracking_number }}</p>
+                            <p style="font-size: 1.5rem; margin: 0; color: #4b5563;">{{ $activeTicket->name }}</p>
+                        </div>
+
+                        <div style="display: flex; gap: 10px; justify-content: center;">
+                            <button wire:click="completeCurrent" class="cashier-action call-next" style="background-color: #28a745; border-color: #28a745;">
+                                ✅ Complete
+                            </button>
+                            <button wire:click="holdCurrent" class="cashier-action skip-student" style="background-color: #ffc107; border-color: #ffc107; color: #000;">
+                                ⏸️ Hold
+                            </button>
+                            <button wire:click="skipCurrent" @if(!$this->canMarkNoShow()) disabled @endif class="cashier-action skip-student" style="background-color: #dc3545; border-color: #dc3545; {{ !$this->canMarkNoShow() ? 'opacity: 0.5; cursor: not-allowed;' : '' }}">
+                                🚫 No Show
+                            </button>
+                        </div>
+                    @else
+                        <p class="empty-message">No one is currently in your window.</p>
+                        
                         @if($isOpen)
-                            <button wire:click="callNext" class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-lg font-bold text-xl transition shadow-md">
+                            <button wire:click="callNext" class="cashier-action call-next" style="margin-top: 1rem;">
                                 Call Next Student
                             </button>
                         @else
-                            <p class="text-red-500 font-semibold mt-4">Window is closed. Open it to start calling students.</p>
+                            <p class="empty-message" style="color: #dc3545; font-weight: bold; margin-top: 1rem;">Window is closed. Open it to start.</p>
                         @endif
+                    @endif
+                </section>
+
+                <!-- ACTIVE LINE -->
+                <section class="glass-card active-line">
+                    <h2 class="active-heading">Active Line <span style="font-size: 0.8em; background: rgba(0,0,0,0.1); padding: 2px 8px; border-radius: 10px;">{{ $activeList->count() }}</span></h2>
+                    <div class="active-divider"></div>
+
+                    <div class="glass-scrollbar" style="display: flex; flex-direction: column; gap: 15px; margin-top: 70px; height: calc(100% - 90px); overflow-y: auto; align-items: center; padding-bottom: 20px;">
+                        @forelse($activeList as $ticket)
+                            <div class="active-student" style="position: relative; left: auto; top: auto; flex-shrink: 0;">
+                                <div class="student-queue-text">
+                                    {{ $ticket->tracking_number }}
+                                    <span class="student-queue-name">{{ $ticket->name }}</span>
+                                </div>
+                            </div>
+                        @empty
+                            <p class="empty-message" style="margin-top: 2rem;">No one in active line</p>
+                        @endforelse
                     </div>
-                @endif
-            </div>
+                </section>
 
-            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
-                <h2 class="text-lg font-bold mb-4 flex justify-between items-center border-b pb-2">
-                    Active Line
-                    <span class="bg-green-100 text-green-800 text-sm py-1 px-3 rounded-full">{{ $activeList->count() }}</span>
-                </h2>
-                <ul class="space-y-3">
-                    @forelse($activeList as $ticket)
-                        <li class="py-3 px-4 bg-green-50 rounded border border-green-100 flex flex-col">
-                            <strong class="text-lg text-gray-800">{{ $ticket->tracking_number }}</strong> 
-                            <span class="text-gray-600 text-sm">{{ $ticket->name }}</span>
-                        </li>
-                    @empty
-                        <li class="py-4 text-center text-gray-400 italic">No one in physical line</li>
-                    @endforelse
-                </ul>
-            </div>
+                <!-- HOLDING LINE -->
+                <section class="glass-card holding-line">
+                    <h2 class="holding-heading">Holding Line <span style="font-size: 0.8em; background: rgba(0,0,0,0.1); padding: 2px 8px; border-radius: 10px;">{{ $holdingList->count() }}</span></h2>
+                    <div class="holding-divider"></div>
 
-            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
-                <h2 class="text-lg font-bold mb-4 flex justify-between items-center border-b pb-2">
-                    Holding Line
-                    <span class="bg-blue-100 text-blue-800 text-sm py-1 px-3 rounded-full">{{ $holdingList->count() }}</span>
-                </h2>
-                <ul class="space-y-3">
-                    @forelse($holdingList as $ticket)
-                        <li class="py-3 px-4 bg-gray-50 rounded border border-gray-100 flex flex-col">
-                            <strong class="text-lg text-gray-800">{{ $ticket->tracking_number }}</strong> 
-                            <span class="text-gray-600 text-sm">{{ $ticket->name }}</span>
-                        </li>
-                    @empty
-                        <li class="py-4 text-center text-gray-400 italic">Holding line is empty</li>
-                    @endforelse
-                </ul>
-            </div>
+                    <div class="glass-scrollbar" style="display: flex; flex-direction: column; gap: 15px; margin-top: 70px; height: calc(100% - 90px); overflow-y: auto; align-items: center; padding-bottom: 20px;">
+                        @forelse($holdingList as $ticket)
+                            <div class="active-student" style="opacity: 0.7; position: relative; left: auto; top: auto; flex-shrink: 0;">
+                                <div class="student-queue-text">
+                                    {{ $ticket->tracking_number }}
+                                    <span class="student-queue-name">{{ $ticket->name }}</span>
+                                </div>
+                            </div>
+                        @empty
+                            <p class="empty-message" style="margin-top: 2rem;">Holding line is empty</p>
+                        @endforelse
+                    </div>
+                </section>
+
+                <!-- STUDENT INFORMATION -->
+                <section class="glass-card student-info">
+                    <h2 class="student-info-heading">Student Information</h2>
+                    <span class="star">★</span>
+                    <div class="student-info-divider"></div>
+
+                    @if($activeTicket && $activeTicket->student)
+                        <div class="student-fields">
+                            <div class="field usn-field">
+                                <span class="field-label">USN Number:</span>
+                                <span class="field-value">{{ $activeTicket->student->usn ?? 'N/A' }}</span>
+                            </div>
+                            <div class="field name-field">
+                                <span class="field-label">Full Name:</span>
+                                <span class="field-value">{{ $activeTicket->student->full_name ?? $activeTicket->name }}</span>
+                            </div>
+                            <div class="field academic-field">
+                                <span class="field-label">Academic Level:</span>
+                                <span class="field-value">{{ $activeTicket->student->academic_level ?? 'N/A' }}</span>
+                            </div>
+                            <div class="field year-field">
+                                <span class="field-label">Year Level:</span>
+                                <span class="field-value">{{ $activeTicket->student->year_level ?? 'N/A' }}</span>
+                            </div>
+                            <div class="field course-field">
+                                <span class="field-label">Course:</span>
+                                <span class="field-value">{{ $activeTicket->student->course ?? 'N/A' }}</span>
+                            </div>
+                        </div>
+                    @elseif($activeTicket)
+                        <div class="student-fields">
+                            <div class="field name-field">
+                                <span class="field-label">Full Name:</span>
+                                <span class="field-value">{{ $activeTicket->name }}</span>
+                            </div>
+                        </div>
+                        <p class="empty-message" style="margin-top: 1rem;">No further student data linked.</p>
+                    @else
+                        <p class="empty-message">No student currently serving.</p>
+                    @endif
+                </section>
+
+            </main>
         </div>
     @endif
 </div>
