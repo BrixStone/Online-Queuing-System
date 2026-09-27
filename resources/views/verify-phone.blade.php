@@ -105,12 +105,12 @@
 
                 <div class="otp-message">
 
-                    <p>
+                    <p style="color: lightgray;">
                         We have sent a verification code to the
                         mobile number you provided.
                     </p>
 
-                    <p>
+                    <p style="color: lightgray;">
                         Enter the 6-digit code below to continue.
                     </p>
 
@@ -166,7 +166,7 @@
 
                 <div class="otp-resend-section">
 
-                    <p id="otpCountdown">
+                    <p id="otpCountdown" style="color: lightgray;">
                         You can request a new OTP in
                         <strong>05:00</strong>
                     </p>
@@ -182,9 +182,29 @@
 
                         <button
                             type="submit"
-                            class="register-button">
+                            class="register-button"
+                            style="
+                            width: 100%;
+                            max-width: 320px;
+                            min-height: 46px;
+                            margin: -50px auto 0;
+                            padding: 12px 20px;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            border: 1px solid rgba(255, 255, 255, 0.25);
+                            border-radius: 10px;
+                            background: #1A3C8F;
+                            color: #ffffff;
+                            font-family: 'Inter', sans-serif;
+                            font-size: 14px;
+                            font-weight: 600;
+                            cursor: pointer;
+                            box-shadow: 0 4px 10px rgba(26, 60, 143, 0.20);
+                            ">
                             Resend OTP
                         </button>
+
 
                     </form>
 
@@ -199,58 +219,58 @@
 
 
     <script>
-    const countdownElement =
-        document.getElementById('otpCountdown');
+        const countdownElement =
+            document.getElementById('otpCountdown');
 
-    const resendForm =
-        document.getElementById('resendOtpForm');
+        const resendForm =
+            document.getElementById('resendOtpForm');
 
-    const expiresAt =
-        new Date("{{ $expires_at->toIso8601String() }}").getTime();
+        const expiresAt =
+            new Date("{{ $expires_at->toIso8601String() }}").getTime();
 
-    function updateCountdown() {
+        function updateCountdown() {
 
-        const now = new Date().getTime();
+            const now = new Date().getTime();
 
-        const remainingMilliseconds =
-            expiresAt - now;
+            const remainingMilliseconds =
+                expiresAt - now;
 
-        const remainingSeconds =
-            Math.max(
-                0,
-                Math.floor(remainingMilliseconds / 1000)
-            );
+            const remainingSeconds =
+                Math.max(
+                    0,
+                    Math.floor(remainingMilliseconds / 1000)
+                );
 
-        const minutes =
-            Math.floor(remainingSeconds / 60);
+            const minutes =
+                Math.floor(remainingSeconds / 60);
 
-        const seconds =
-            remainingSeconds % 60;
+            const seconds =
+                remainingSeconds % 60;
 
-        if (remainingSeconds <= 0) {
+            if (remainingSeconds <= 0) {
 
-            countdownElement.style.display = 'none';
+                countdownElement.style.display = 'none';
 
-            resendForm.style.display = 'block';
+                resendForm.style.display = 'block';
 
-            clearInterval(countdown);
+                clearInterval(countdown);
 
-            return;
-        }
+                return;
+            }
 
-        countdownElement.innerHTML =
-            `You can request a new OTP in <strong>${
+            countdownElement.innerHTML =
+                `You can request a new OTP in <strong>${
                 String(minutes).padStart(2, '0')
             }:${
                 String(seconds).padStart(2, '0')
             }</strong>`;
-    }
+        }
 
-    updateCountdown();
+        updateCountdown();
 
-    const countdown =
-        setInterval(updateCountdown, 1000);
-</script>
+        const countdown =
+            setInterval(updateCountdown, 1000);
+    </script>
 
 
 </body>
