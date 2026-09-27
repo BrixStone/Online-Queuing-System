@@ -754,7 +754,7 @@ $cancelTicket = function () {
                         QueueTicket::STATUS_HOLDING
                         )
 
-                        PLEASE WAIT. WE'LL NOTIFY YOU WHEN
+                        PLEASE WAIT. WE'LL NOTIFY YOU WHEN<br>
                         YOU ARE CLOSE TO BEING SERVED.
 
 
@@ -763,7 +763,7 @@ $cancelTicket = function () {
                         QueueTicket::STATUS_ACTIVE
                         )
 
-                        YOU ARE CLOSE TO BEING SERVED.
+                        YOU ARE CLOSE TO BEING SERVED.<br>
                         PLEASE STAY NEARBY.
 
 
@@ -901,10 +901,10 @@ $cancelTicket = function () {
 
                         <div
                             id="arrival-countdown"
-                            data-expires-at="{{ $queue->serving_started_at->copy()->addMinutes(5)->toIso8601String() }}"
+                            data-expires-at="{{ $queue->serving_started_at->copy()->addMinutes(3)->toIso8601String() }}"
                             class="serving-countdown">
 
-                            05:00
+                            03:00
 
                         </div>
 
@@ -978,14 +978,14 @@ $cancelTicket = function () {
 
                 <div class="star">
 
-                    ★
+                    
 
                 </div>
 
 
                 <div class="how-to-title">
 
-                    HOW TO KNOW IT'S YOUR TURN
+                    ★ HOW TO KNOW IT'S YOUR TURN
 
                 </div>
 
