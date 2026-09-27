@@ -120,31 +120,62 @@ new class extends Component {
 
 <div wire:poll.2s>
     @if(!$isAuthenticated)
-        <div class="p-8 font-sans">
-            <div class="max-w-md mx-auto mt-20 bg-white p-8 rounded-xl border-2 border-gray-200 shadow-sm text-center">
-                <h2 class="text-2xl font-bold mb-6 text-gray-800">Cashier Login</h2>
-                <p class="text-gray-600 mb-6">Please enter your PIN to access the dashboard.</p>
-                
-                @if (session()->has('auth_error'))
-                    <div class="bg-red-100 text-red-700 p-3 mb-6 rounded border border-red-300 font-medium text-sm">
-                        {{ session('auth_error') }}
-                    </div>
-                @endif
+        <!-- Inject required CSS/Fonts for the cashier-login layout -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Outfit:wght@100;400;700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="{{ asset('css/cashier-login.css') }}">
 
-                <form wire:submit="authenticate">
-                    <input 
-                        type="password" 
-                        wire:model="pinInput" 
-                        class="w-full text-center text-3xl tracking-[1em] p-4 mb-6 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-100 transition"
-                        placeholder="••••"
-                        maxlength="4"
-                        required
-                        autofocus
-                    >
-                    <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white px-6 py-4 rounded-lg font-bold text-lg transition shadow-md">
-                        Enter Dashboard
-                    </button>
-                </form>
+        <div class="cashier-login">
+            <!-- Background -->
+            <div class="background"></div>
+            <div class="background-overlay"></div>
+
+            <!-- Main Content -->
+            <main class="main-body">
+                <!-- Glass Login Card -->
+                <section class="glass-card">
+                    
+                    <!-- Header -->
+                    <header class="card-header">
+                        <h1 class="card-title">QUEUE STATUS</h1>
+                        <p class="card-subtitle">Please enter PIN to access the dashboard</p>
+                    </header>
+
+                    @if (session()->has('auth_error'))
+                        <div style="color: #dc3545; text-align: center; margin-bottom: 1rem; font-weight: bold; background: rgba(255, 255, 255, 0.8); padding: 5px; border-radius: 5px;">
+                            {{ session('auth_error') }}
+                        </div>
+                    @endif
+
+                    <!-- Form -->
+                    <form wire:submit="authenticate" class="form-actions">
+                        
+                        <!-- PIN Input (Replacing the static spans with a working input) -->
+                        <div class="pin-box" style="padding: 0; background: transparent; border: none; box-shadow: none;">
+                            <input 
+                                type="password" 
+                                wire:model="pinInput" 
+                                style="width: 100%; text-align: center; font-size: 2rem; letter-spacing: 0.5em; padding: 15px; border-radius: 12px; border: 2px solid rgba(255, 255, 255, 0.3); background: rgba(255, 255, 255, 0.1); color: white; outline: none;"
+                                placeholder="••••"
+                                maxlength="4"
+                                required
+                                autofocus
+                            >
+                        </div>
+
+                        <!-- Enter Button -->
+                        <button type="submit" class="enter-button">
+                            Enter Dashboard
+                        </button>
+
+                    </form>
+                </section>
+            </main>
+
+            <!-- Watermark -->
+            <div class="watermark">
+                <img class="icon-line" src="{{ asset('images/ACLC_logo.svg') }}" alt="Line">
             </div>
         </div>
     @else
@@ -153,6 +184,23 @@ new class extends Component {
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Outfit:wght@100;400;700&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="{{ asset('css/cashier.css') }}">
+        
+        <style>
+            .glass-scrollbar::-webkit-scrollbar {
+                width: 8px;
+            }
+            .glass-scrollbar::-webkit-scrollbar-track {
+                background: rgba(255, 255, 255, 0.05); 
+                border-radius: 10px;
+            }
+            .glass-scrollbar::-webkit-scrollbar-thumb {
+                background: rgba(255, 255, 255, 0.3); 
+                border-radius: 10px;
+            }
+            .glass-scrollbar::-webkit-scrollbar-thumb:hover {
+                background: rgba(255, 255, 255, 0.5); 
+            }
+        </style>
 
         <div class="cashier-page">
             <div class="background"></div>
@@ -219,16 +267,18 @@ new class extends Component {
                     <h2 class="active-heading">Active Line <span style="font-size: 0.8em; background: rgba(0,0,0,0.1); padding: 2px 8px; border-radius: 10px;">{{ $activeList->count() }}</span></h2>
                     <div class="active-divider"></div>
 
-                    @forelse($activeList as $ticket)
-                        <div class="active-student">
-                            <div class="student-queue-text">
-                                {{ $ticket->tracking_number }}
-                                <span class="student-queue-name">{{ $ticket->name }}</span>
+                    <div class="glass-scrollbar" style="display: flex; flex-direction: column; gap: 15px; margin-top: 70px; height: calc(100% - 90px); overflow-y: auto; align-items: center; padding-bottom: 20px;">
+                        @forelse($activeList as $ticket)
+                            <div class="active-student" style="position: relative; left: auto; top: auto; flex-shrink: 0;">
+                                <div class="student-queue-text">
+                                    {{ $ticket->tracking_number }}
+                                    <span class="student-queue-name">{{ $ticket->name }}</span>
+                                </div>
                             </div>
-                        </div>
-                    @empty
-                        <p class="empty-message">No one in active line</p>
-                    @endforelse
+                        @empty
+                            <p class="empty-message" style="margin-top: 2rem;">No one in active line</p>
+                        @endforelse
+                    </div>
                 </section>
 
                 <!-- HOLDING LINE -->
@@ -236,16 +286,18 @@ new class extends Component {
                     <h2 class="holding-heading">Holding Line <span style="font-size: 0.8em; background: rgba(0,0,0,0.1); padding: 2px 8px; border-radius: 10px;">{{ $holdingList->count() }}</span></h2>
                     <div class="holding-divider"></div>
 
-                    @forelse($holdingList as $ticket)
-                        <div class="active-student" style="opacity: 0.7;">
-                            <div class="student-queue-text">
-                                {{ $ticket->tracking_number }}
-                                <span class="student-queue-name">{{ $ticket->name }}</span>
+                    <div class="glass-scrollbar" style="display: flex; flex-direction: column; gap: 15px; margin-top: 70px; height: calc(100% - 90px); overflow-y: auto; align-items: center; padding-bottom: 20px;">
+                        @forelse($holdingList as $ticket)
+                            <div class="active-student" style="opacity: 0.7; position: relative; left: auto; top: auto; flex-shrink: 0;">
+                                <div class="student-queue-text">
+                                    {{ $ticket->tracking_number }}
+                                    <span class="student-queue-name">{{ $ticket->name }}</span>
+                                </div>
                             </div>
-                        </div>
-                    @empty
-                        <p class="empty-message">Holding line is empty</p>
-                    @endforelse
+                        @empty
+                            <p class="empty-message" style="margin-top: 2rem;">Holding line is empty</p>
+                        @endforelse
+                    </div>
                 </section>
 
                 <!-- STUDENT INFORMATION -->
