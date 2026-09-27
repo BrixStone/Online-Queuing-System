@@ -52,7 +52,7 @@ class QueueTicket extends Model
     public const MAX_ACTIVE = 5;
 
     // Customer has 3 minutes to press "I'm Here".
-    public const ARRIVAL_MINUTES = 5;
+    public const ARRIVAL_MINUTES = 3;
 
 
     protected $casts = [
