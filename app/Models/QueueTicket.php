@@ -87,22 +87,22 @@ class QueueTicket extends Model
     | Relationships
     |--------------------------------------------------------------------------
     */
-    public function student(): BelongsTo
-    {
-        return $this->belongsTo(
-            Student::class,
-            'student_id'
-        );
-    }
+    public function student()
+{
+    return $this->belongsTo(
+        Student::class,
+        'student_id'
+    );
+}
 
 
-    public function transactionRequest(): BelongsTo
-    {
-        return $this->belongsTo(
-            TransactionRequest::class,
-            'transaction_request_id'
-        );
-    }
+    public function transactionRequest()
+{
+    return $this->belongsTo(
+        TransactionRequest::class,
+        'transaction_request_id'
+    );
+}
     public function scopeHolding($query)
     {
         return $query
