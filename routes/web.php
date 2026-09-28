@@ -12,10 +12,10 @@ Route::get('/tracking', function () {
     return view('Tracking');
 });
 Route::get('/cashier-login', function () {
-    return view('cashier-login');
+    return view('cashier-login_backup');
 });
 Route::get('/cashier1', function () {
-    return view('cashier1');
+    return view('cashier1_backup');
 });
 
 Volt::route('/cashier', 'cashier-dashboard');

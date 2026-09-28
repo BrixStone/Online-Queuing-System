@@ -1,15 +1,6 @@
 @extends('layouts.navbar')
 
 @section('content')
-    <!DOCTYPE html>
-    <html lang="en">
-
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-        <title>Welcome - Fill Up Form</title>
-
         <!-- Google Fonts -->
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -18,10 +9,8 @@
             href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@700;800&display=swap"
             rel="stylesheet">
 
-        <!-- Your CSS -->
-        <link rel="stylesheet" href="{{ asset('css/style.css') }}">
-
         <style>
+            
             /* Position canvas over background image/overlay but behind main body content */
             #bg-canvas {
                 position: absolute;
@@ -45,10 +34,8 @@
                 /* Ensures form sits in front of the background grid */
             }
         </style>
-    </head>
+    
 
-
-    <body>
 
         <!-- =========================================
             REGISTER CONTAINER
@@ -156,7 +143,7 @@
                                 <input type="text" id="student_number" name="student_number"
                                     placeholder="C25-01-*****-MAN121" value="{{ old('student_number') }}" required>
 
-                                <svg class="user-icon" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                <svg class="user-icon" width="30" height="30" viewBox="0 0 24 24" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">
 
                                     <circle cx="12" cy="8" r="4" stroke="white" stroke-width="2" />
@@ -183,7 +170,7 @@
                                 <input type="text" id="purpose" name="purpose" placeholder="Enter your Purpose"
                                     value="{{ old('purpose') }}" required>
 
-                                <svg class="purpose-icon" width="10" height="13" viewBox="0 0 10 13" fill="none"
+                                <svg class="purpose-icon" width="20" height="20" viewBox="0 0 10 13" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">
                                     <path
                                         d="M7.72135 7.39121C8.35938 6.73359 8.75 5.85 8.75 4.875C8.75 2.85645 7.07031 1.21875 5 1.21875C2.92969 1.21875 1.25 2.85645 1.25 4.875C1.25 5.85 1.64062 6.73359 2.27865 7.39121C2.83333 7.95996 3.44792 8.7623 3.66667 9.75H6.33333C6.55208 8.75977 7.16667 7.95996 7.72135 7.39121ZM8.6276 8.2291C8.01302 8.86133 7.5 9.6332 7.5 10.5041V10.9688C7.5 12.091 6.56771 13 5.41667 13H4.58333C3.43229 13 2.5 12.091 2.5 10.9688V10.5041C2.5 9.6332 1.98698 8.86133 1.3724 8.2291C0.520833 7.35566 0 6.175 0 4.875C0 2.18359 2.23958 0 5 0C7.76042 0 10 2.18359 10 4.875C10 6.175 9.47917 7.35566 8.6276 8.2291ZM3.75 4.67187C3.75 5.00957 3.47135 5.28125 3.125 5.28125C2.77865 5.28125 2.5 5.00957 2.5 4.67187C2.5 3.43789 3.52604 2.4375 4.79167 2.4375C5.13802 2.4375 5.41667 2.70918 5.41667 3.04687C5.41667 3.38457 5.13802 3.65625 4.79167 3.65625C4.21615 3.65625 3.75 4.11074 3.75 4.67187Z"
@@ -208,7 +195,7 @@
                                 <input type="tel" id="mobile_number" name="mobile_number" placeholder="(+63)9*********"
                                     value="{{ old('mobile_number') }}" maxlength="11" minlength="11" pattern="09[0-9]{9}"
                                     inputmode="numeric" required>
-                                <svg class="phone" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640">
+                                <svg class="phone" width="20" height="20"xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640">
                                     <path fill="rgb(255, 255, 255)"
                                         d="M224.2 89C216.3 70.1 195.7 60.1 176.1 65.4L170.6 66.9C106 84.5 50.8 147.1 66.9 223.3C104 398.3 241.7 536 416.7 573.1C493 589.3 555.5 534 573.1 469.4L574.6 463.9C580 444.2 569.9 423.6 551.1 415.8L453.8 375.3C437.3 368.4 418.2 373.2 406.8 387.1L368.2 434.3C297.9 399.4 241.3 341 208.8 269.3L253 233.3C266.9 222 271.6 202.9 264.8 186.3L224.2 89z" />
                                 </svg>
@@ -220,7 +207,7 @@
 
                         <!-- HIDDEN DEVICE ID -->
 
-                        <input type="hidden" name="device_id" id="device_id">
+                        <!-- <input type="hidden" name="device_id" id="device_id"> -->
 
 
                         <!-- HIDDEN PLATFORM -->
@@ -353,7 +340,7 @@
             animateGrid();
         </script>
 
-    </body>
+    
 
     </html>
 @endsection

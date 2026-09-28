@@ -11,7 +11,7 @@
             z-index: -2;
 
             /* Add your image URL here */
-            background-image: url('path/to/your-image.jpg');
+            background-image: url('images/Regis_Back.svg');
 
             background-size: cover;
             background-position: center center;

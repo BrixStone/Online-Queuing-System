@@ -46,20 +46,20 @@ class UserControllers extends Controller
                 'string',
             ],
 
-            'device_id' => [
-                'required',
-                'uuid',
-            ],
+            // 'device_id' => [
+            //     // 'required',
+            //     'uuid',
+            // ],
 
             'mobile_number' => [
                 'required',
                 'regex:/^09\d{9}$/',
             ],
 
-            'platform' => [
-                'required',
-                'string',
-            ],
+        //     'platform' => [
+        //         'required',
+        //         'string',
+        //     ],
         ]);
 
 
@@ -234,9 +234,9 @@ class UserControllers extends Controller
                 'student_id' => $student->id,
                 'student_number' => $student->student_number,
                 'purpose' => $validated['purpose'],
-                'device_id' => $validated['device_id'],
+                // 'device_id' => $validated['device_id'],
                 'mobile_number' => $mobileNumber,
-                'platform' => $validated['platform'],
+                // 'platform' => $validated['platform'],
                 'verification_id' => $verification->id,
             ],
         ]);
