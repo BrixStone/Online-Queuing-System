@@ -4,6 +4,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserControllers;
 use App\Http\Controllers\PhoneVerificationController;
 use Livewire\Volt\Volt;
+use App\Models\Ticket;
+use App\Models\QueueTicket;
+
 
 Route::get('/', function () {
     return view('welcome');
@@ -43,4 +46,17 @@ Route::get('/contact', function () {
 
 Route::get('/about', function () {
     return view('about');
+});
+
+Route::get('/history', function () {
+    // 1. Get all tickets (newest first)
+    $tickets = \App\Models\QueueTicket::orderBy('created_at', 'desc')->get(); 
+    
+    // 2. Check if the URL has a clicked ticket (e.g., /history?ticket=5)
+    $selectedId = request('ticket'); 
+    
+    // 3. Get the specific ticket details if one was clicked
+    $selectedTicket = $selectedId ? \App\Models\QueueTicket::find($selectedId) : null; 
+    
+    return view('history', compact('tickets', 'selectedTicket'));
 });
